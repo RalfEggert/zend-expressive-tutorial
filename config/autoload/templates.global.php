@@ -22,7 +22,6 @@ return [
             'error/404'      => 'templates/error/404.phtml',
         ],
         'paths' => [
-            'app'    => ['templates/app'],
             'layout' => ['templates/layout'],
             'error'  => ['templates/error'],
         ],
