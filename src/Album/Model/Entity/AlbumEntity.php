@@ -55,7 +55,9 @@ class AlbumEntity implements ArraySerializableInterface
     public function exchangeArray(array $array)
     {
         foreach ($array as $key => $value) {
-            $this->$key = $value;
+            if (property_exists($this, $key)) {
+                $this->$key = $value;
+            }
         }
     }
 
