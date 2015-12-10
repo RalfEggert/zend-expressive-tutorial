@@ -18,9 +18,7 @@ class AlbumListFactory
      */
     public function __invoke(ContainerInterface $container)
     {
-        $template = ($container->has(TemplateRendererInterface::class))
-            ? $container->get(TemplateRendererInterface::class)
-            : null;
+        $template = $container->get(TemplateRendererInterface::class);
 
         return new AlbumListAction($template);
     }
