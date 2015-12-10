@@ -26,7 +26,7 @@ return [
     'routes' => [
         [
             'name' => 'album',
-            'path' => '/album',
+            'path' => '/',
             'middleware' => Album\Action\AlbumListAction::class,
             'allowed_methods' => ['GET'],
         ],
