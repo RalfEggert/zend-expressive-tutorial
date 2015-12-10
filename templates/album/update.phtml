@@ -1,0 +1,46 @@
+<?php
+use Album\Form\AlbumForm;
+
+/** @var AlbumForm $form */
+$form = $this->albumForm;
+
+$this->headTitle('Edit album');
+?>
+
+<div class="jumbotron">
+    <h1>Edit album</h1>
+</div>
+
+<div class="alert alert-danger">
+    <strong><?php echo $this->message; ?></strong>
+</div>
+
+<div class="well">
+    <?php echo $this->form()->openTag($form); ?>
+    <div class="form-group">
+        <?php echo $this->formLabel($form->get('artist')); ?>
+        <div class="col-sm-10">
+            <?php echo $this->formElement($form->get('artist')); ?>
+            <?php echo $this->formElementErrors($form->get('artist')); ?>
+        </div>
+    </div>
+    <div class="form-group">
+        <?php echo $this->formLabel($form->get('title')); ?>
+        <div class="col-sm-10">
+            <?php echo $this->formElement($form->get('title')); ?>
+            <?php echo $this->formElementErrors($form->get('title')); ?>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <?php echo $this->formElement($form->get('save_album')); ?>
+        </div>
+    </div>
+    <?php echo $this->form()->closeTag(); ?>
+</div>
+
+<p>
+    <a href="<?php echo $this->url('album') ?>" class="btn btn-success">
+        Back to album list
+    </a>
+</p>

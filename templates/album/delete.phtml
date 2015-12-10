@@ -1,0 +1,52 @@
+<?php
+use Album\Form\AlbumForm;
+use Album\Model\Entity\AlbumEntity;
+
+/** @var AlbumForm $form */
+$form = $this->albumForm;
+
+/** @var AlbumEntity $album */
+$album = $this->albumEntity;
+
+$this->headTitle('Delete album');
+?>
+
+<div class="jumbotron">
+    <h1>Delete album</h1>
+</div>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Id</th>
+        <td><?php echo $album->getId(); ?></td>
+    </tr>
+    <tr>
+        <th>Artist</th>
+        <td><?php echo $album->getArtist(); ?></td>
+    </tr>
+    <tr>
+        <th>Title</th>
+        <td><?php echo $album->getTitle(); ?></td>
+    </tr>
+</table>
+
+<div class="alert alert-danger">
+    <strong><?php echo $this->message; ?></strong>
+</div>
+
+<div class="well">
+    <?php echo $this->form()->openTag($form); ?>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <?php echo $this->formElement($form->get('delete_album_yes')); ?>
+            <?php echo $this->formElement($form->get('delete_album_no')); ?>
+        </div>
+    </div>
+    <?php echo $this->form()->closeTag(); ?>
+</div>
+
+<p>
+    <a href="<?php echo $this->url('album') ?>" class="btn btn-success">
+        Back to album list
+    </a>
+</p>
