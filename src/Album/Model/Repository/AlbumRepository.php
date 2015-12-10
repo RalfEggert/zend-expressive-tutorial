@@ -1,21 +1,21 @@
 <?php
-namespace Album\Model\Table;
+namespace Album\Model\Repository;
 
 use Album\Model\Entity\AlbumEntity;
 use Zend\Db\TableGateway\TableGateway;
 
 /**
- * Class AlbumTable
+ * Class AlbumRepository
  *
- * @package Album\Model\Table
+ * @package Album\Model\Repository
  */
-class AlbumTable
+class AlbumRepository
 {
     /** @var TableGateway */
     private $gateway;
 
     /**
-     * AlbumTable constructor.
+     * AlbumRepository constructor.
      * @param TableGateway $gateway
      */
     public function __construct(TableGateway $gateway)

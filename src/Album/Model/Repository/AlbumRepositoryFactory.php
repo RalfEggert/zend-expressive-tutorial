@@ -1,5 +1,5 @@
 <?php
-namespace Album\Model\Table;
+namespace Album\Model\Repository;
 
 use Album\Model\Entity\AlbumEntity;
 use Interop\Container\ContainerInterface;
@@ -9,16 +9,16 @@ use Zend\Db\TableGateway\TableGateway;
 use Zend\Hydrator\ArraySerializable;
 
 /**
- * Class AlbumTableFactory
+ * Class AlbumRepositoryFactory
  *
- * @package Album\Model\Table
+ * @package Album\Model\Repository
  */
-class AlbumTableFactory
+class AlbumRepositoryFactory
 {
     /**
      * @param ContainerInterface $container
      *
-     * @return AlbumTable
+     * @return AlbumRepository
      */
     public function __invoke(ContainerInterface $container)
     {
@@ -28,6 +28,6 @@ class AlbumTableFactory
         );
         $gateway = new TableGateway('album', $adapter, null, $resultSetPrototype);
 
-        return new AlbumTable($gateway);
+        return new AlbumRepository($gateway);
     }
 }
