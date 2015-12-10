@@ -7,8 +7,8 @@ return [
             Album\Action\AlbumCreateAction::class =>
                 Album\Action\AlbumCreateFactory::class,
 
-            Album\Form\AlbumForm::class =>
-                Album\Form\AlbumFormFactory::class,
+            Album\Form\AlbumDataForm::class =>
+                Album\Form\AlbumDataFormFactory::class,
 
             Album\Model\Table\AlbumTable::class =>
                 Album\Model\Table\AlbumTableFactory::class,

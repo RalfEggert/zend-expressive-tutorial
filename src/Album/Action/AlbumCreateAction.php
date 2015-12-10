@@ -1,7 +1,7 @@
 <?php
 namespace Album\Action;
 
-use Album\Form\AlbumForm;
+use Album\Form\AlbumDataForm;
 use Album\Model\Entity\AlbumEntity;
 use Album\Model\Table\AlbumTable;
 use Psr\Http\Message\ResponseInterface;
@@ -34,7 +34,7 @@ class AlbumCreateAction
     private $albumTable;
 
     /**
-     * @var AlbumForm
+     * @var AlbumDataForm
      */
     private $albumForm;
 
@@ -44,11 +44,11 @@ class AlbumCreateAction
      * @param TemplateRendererInterface $template
      * @param RouterInterface           $router
      * @param AlbumTable                $albumTable
-     * @param AlbumForm                 $albumForm
+     * @param AlbumDataForm             $albumForm
      */
     public function __construct(
         TemplateRendererInterface $template, RouterInterface $router,
-        AlbumTable $albumTable, AlbumForm $albumForm
+        AlbumTable $albumTable, AlbumDataForm $albumForm
     ) {
         $this->template   = $template;
         $this->router     = $router;
@@ -91,7 +91,6 @@ class AlbumCreateAction
         }
 
         $data = [
-            'albumList' => $this->albumTable->fetchAllAlbums(),
             'albumForm' => $this->albumForm,
             'message'   => $message,
         ];

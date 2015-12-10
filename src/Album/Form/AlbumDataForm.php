@@ -4,11 +4,11 @@ namespace Album\Form;
 use Zend\Form\Form;
 
 /**
- * Class AlbumForm
+ * Class AlbumDataForm
  *
  * @package Album\Form
  */
-class AlbumForm extends Form
+class AlbumDataForm extends Form
 {
     /**
      * Init form
