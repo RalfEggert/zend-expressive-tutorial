@@ -4,6 +4,9 @@ return [
         'factories' => [
             Album\Action\AlbumListAction::class =>
                 Album\Action\AlbumListFactory::class,
+
+            Album\Model\Table\AlbumTable::class =>
+                Album\Model\Table\AlbumTableFactory::class,
         ],
     ],
 
