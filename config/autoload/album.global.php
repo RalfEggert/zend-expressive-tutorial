@@ -43,7 +43,7 @@ return [
             'allowed_methods' => ['GET', 'POST'],
             'options'         => [
                 'constraints' => [
-                    'id' => '[0-9]+',
+                    'id' => '[1-9][0-9]*',
                 ],
             ],
         ],
@@ -54,7 +54,7 @@ return [
             'allowed_methods' => ['GET', 'POST'],
             'options'         => [
                 'constraints' => [
-                    'id' => '[0-9]+',
+                    'id' => '[1-9][0-9]*',
                 ],
             ],
         ],
