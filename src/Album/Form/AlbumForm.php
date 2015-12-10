@@ -11,7 +11,7 @@ use Zend\Form\Form;
 class AlbumForm extends Form
 {
     /**
-     *
+     * Init form
      */
     public function init()
     {

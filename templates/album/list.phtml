@@ -8,12 +8,6 @@ $this->headTitle('Albums');
     <h1>Album list</h1>
 </div>
 
-<p>
-    <a href="<?php echo $this->url('album-create') ?>" class="btn btn-success">
-        Create new album
-    </a>
-</p>
-
 <table class="table table-bordered table-striped">
     <thead>
     <tr>
@@ -33,3 +27,9 @@ $this->headTitle('Albums');
     <?php endforeach; ?>
     </tbody>
 </table>
+
+<p>
+    <a href="<?php echo $this->url('album-create') ?>" class="btn btn-success">
+        Create new album
+    </a>
+</p>

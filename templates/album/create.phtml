@@ -11,11 +11,9 @@ $this->headTitle('Create new album');
     <h1>Create new album</h1>
 </div>
 
-<p>
-    <a href="<?php echo $this->url('album') ?>" class="btn btn-success">
-        Back to album list
-    </a>
-</p>
+<div class="alert alert-danger">
+    <strong><?php echo $this->message; ?></strong>
+</div>
 
 <div class="well">
     <?php echo $this->form()->openTag($form); ?>
@@ -40,3 +38,9 @@ $this->headTitle('Create new album');
     </div>
     <?php echo $this->form()->closeTag(); ?>
 </div>
+
+<p>
+    <a href="<?php echo $this->url('album') ?>" class="btn btn-success">
+        Back to album list
+    </a>
+</p>

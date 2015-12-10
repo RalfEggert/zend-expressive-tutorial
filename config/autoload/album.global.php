@@ -7,11 +7,13 @@ return [
             Album\Action\AlbumCreateAction::class =>
                 Album\Action\AlbumCreateFactory::class,
 
-            Album\Model\Table\AlbumTable::class =>
-                Album\Model\Table\AlbumTableFactory::class,
-
             Album\Form\AlbumForm::class =>
                 Album\Form\AlbumFormFactory::class,
+
+            Album\Model\Table\AlbumTable::class =>
+                Album\Model\Table\AlbumTableFactory::class,
+            Album\Model\InputFilter\AlbumInputFilter::class =>
+                Album\Model\InputFilter\AlbumInputFilterFactory::class,
         ],
     ],
 
