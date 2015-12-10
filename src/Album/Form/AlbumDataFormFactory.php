@@ -7,23 +7,23 @@ use Zend\Form\Form;
 use Zend\Hydrator\ArraySerializable;
 
 /**
- * Class AlbumFormFactory
+ * Class AlbumDataFormFactory
  *
  * @package Album\Form
  */
-class AlbumFormFactory extends Form
+class AlbumDataFormFactory extends Form
 {
     /**
      * @param ContainerInterface $container
      *
-     * @return AlbumForm
+     * @return AlbumDataForm
      */
     public function __invoke(ContainerInterface $container)
     {
         $hydrator    = new ArraySerializable();
         $inputFilter = $container->get(AlbumInputFilter::class);
 
-        $form = new AlbumForm();
+        $form = new AlbumDataForm();
         $form->setHydrator($hydrator);
         $form->setInputFilter($inputFilter);
         $form->init();

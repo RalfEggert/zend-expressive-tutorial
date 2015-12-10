@@ -1,7 +1,7 @@
 <?php
 namespace Album\Action;
 
-use Album\Form\AlbumForm;
+use Album\Form\AlbumDataForm;
 use Album\Model\Table\AlbumTable;
 use Interop\Container\ContainerInterface;
 use Zend\Expressive\Router\RouterInterface;
@@ -24,7 +24,7 @@ class AlbumUpdateFactory
         $template = $container->get(TemplateRendererInterface::class);
         $router = $container->get(RouterInterface::class);
         $albumTable = $container->get(AlbumTable::class);
-        $albumForm = $container->get(AlbumForm::class);
+        $albumForm = $container->get(AlbumDataForm::class);
 
         return new AlbumUpdateAction(
             $template, $router, $albumTable, $albumForm

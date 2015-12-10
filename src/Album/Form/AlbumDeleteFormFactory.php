@@ -14,7 +14,7 @@ class AlbumDeleteFormFactory extends Form
     /**
      * @param ContainerInterface $container
      *
-     * @return AlbumForm
+     * @return AlbumDeleteForm
      */
     public function __invoke(ContainerInterface $container)
     {

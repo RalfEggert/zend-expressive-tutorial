@@ -11,8 +11,8 @@ return [
             Album\Action\AlbumDeleteAction::class =>
                 Album\Action\AlbumDeleteFactory::class,
 
-            Album\Form\AlbumForm::class =>
-                Album\Form\AlbumFormFactory::class,
+            Album\Form\AlbumDataForm::class =>
+                Album\Form\AlbumDataFormFactory::class,
             Album\Form\AlbumDeleteForm::class =>
                 Album\Form\AlbumDeleteFormFactory::class,
 

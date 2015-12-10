@@ -1,7 +1,7 @@
 <?php
 namespace Album\Action;
 
-use Album\Form\AlbumForm;
+use Album\Form\AlbumDataForm;
 use Album\Model\Table\AlbumTable;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -33,7 +33,7 @@ class AlbumUpdateAction
     private $albumTable;
 
     /**
-     * @var AlbumForm
+     * @var AlbumDataForm
      */
     private $albumForm;
 
@@ -43,11 +43,11 @@ class AlbumUpdateAction
      * @param TemplateRendererInterface $template
      * @param RouterInterface           $router
      * @param AlbumTable                $albumTable
-     * @param AlbumForm                 $albumForm
+     * @param AlbumDataForm                 $albumForm
      */
     public function __construct(
         TemplateRendererInterface $template, RouterInterface $router,
-        AlbumTable $albumTable, AlbumForm $albumForm
+        AlbumTable $albumTable, AlbumDataForm $albumForm
     ) {
         $this->template   = $template;
         $this->router     = $router;
