@@ -16,8 +16,8 @@ return [
             Album\Form\AlbumDeleteForm::class =>
                 Album\Form\AlbumDeleteFormFactory::class,
 
-            Album\Model\Table\AlbumTable::class =>
-                Album\Model\Table\AlbumTableFactory::class,
+            Album\Model\Repository\AlbumRepository::class =>
+                Album\Model\Repository\AlbumRepositoryFactory::class,
             Album\Model\InputFilter\AlbumInputFilter::class =>
                 Album\Model\InputFilter\AlbumInputFilterFactory::class,
         ],

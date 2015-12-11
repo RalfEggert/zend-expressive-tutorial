@@ -2,7 +2,7 @@
 namespace Album\Action;
 
 use Album\Form\AlbumDataForm;
-use Album\Model\Table\AlbumTable;
+use Album\Model\Repository\AlbumRepository;
 use Interop\Container\ContainerInterface;
 use Zend\Expressive\Router\RouterInterface;
 use Zend\Expressive\Template\TemplateRendererInterface;
@@ -21,13 +21,13 @@ class AlbumCreateFactory
      */
     public function __invoke(ContainerInterface $container)
     {
-        $template   = $container->get(TemplateRendererInterface::class);
-        $router     = $container->get(RouterInterface::class);
-        $albumTable = $container->get(AlbumTable::class);
-        $albumForm  = $container->get(AlbumDataForm::class);
+        $template        = $container->get(TemplateRendererInterface::class);
+        $router          = $container->get(RouterInterface::class);
+        $albumRepository = $container->get(AlbumRepository::class);
+        $albumForm       = $container->get(AlbumDataForm::class);
 
         return new AlbumCreateAction(
-            $template, $router, $albumTable, $albumForm
+            $template, $router, $albumRepository, $albumForm
         );
     }
 }

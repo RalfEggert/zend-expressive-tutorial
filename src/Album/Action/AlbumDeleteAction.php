@@ -2,7 +2,7 @@
 namespace Album\Action;
 
 use Album\Form\AlbumDeleteForm;
-use Album\Model\Table\AlbumTable;
+use Album\Model\Repository\AlbumRepository;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
@@ -28,9 +28,9 @@ class AlbumDeleteAction
     private $router;
 
     /**
-     * @var AlbumTable
+     * @var AlbumRepository
      */
-    private $albumTable;
+    private $albumRepository;
 
     /**
      * @var AlbumDeleteForm
@@ -42,17 +42,17 @@ class AlbumDeleteAction
      *
      * @param TemplateRendererInterface $template
      * @param RouterInterface           $router
-     * @param AlbumTable                $albumTable
+     * @param AlbumRepository           $albumRepository
      * @param AlbumDeleteForm           $albumForm
      */
     public function __construct(
         TemplateRendererInterface $template, RouterInterface $router,
-        AlbumTable $albumTable, AlbumDeleteForm $albumForm
+        AlbumRepository $albumRepository, AlbumDeleteForm $albumForm
     ) {
-        $this->template   = $template;
-        $this->router     = $router;
-        $this->albumTable = $albumTable;
-        $this->albumForm  = $albumForm;
+        $this->template = $template;
+        $this->router = $router;
+        $this->albumRepository = $albumRepository;
+        $this->albumForm = $albumForm;
     }
 
     /**
@@ -70,13 +70,13 @@ class AlbumDeleteAction
 
         $id = $request->getAttribute('id');
 
-        $album = $this->albumTable->fetchSingleAlbum($id);
+        $album = $this->albumRepository->fetchSingleAlbum($id);
 
         if ($request->getMethod() == 'POST') {
             $postData = $request->getParsedBody();
 
             if (isset($postData['delete_album_yes'])) {
-                $this->albumTable->deleteAlbum($album);
+                $this->albumRepository->deleteAlbum($album);
             }
             
             return new RedirectResponse(
