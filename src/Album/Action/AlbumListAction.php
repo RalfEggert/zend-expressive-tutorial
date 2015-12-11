@@ -1,7 +1,7 @@
 <?php
 namespace Album\Action;
 
-use Album\Model\Table\AlbumTable;
+use Album\Model\Repository\AlbumRepository;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
@@ -20,21 +20,21 @@ class AlbumListAction
     private $template;
 
     /**
-     * @var AlbumTable
+     * @var AlbumRepository
      */
-    private $albumTable;
+    private $albumRepository;
 
     /**
      * AlbumListAction constructor.
      *
      * @param TemplateRendererInterface $template
-     * @param AlbumTable                $albumTable
+     * @param AlbumRepository           $albumRepository
      */
     public function __construct(
-        TemplateRendererInterface $template, AlbumTable $albumTable
+        TemplateRendererInterface $template, AlbumRepository $albumRepository
     ) {
-        $this->template = $template;
-        $this->albumTable = $albumTable;
+        $this->template        = $template;
+        $this->albumRepository = $albumRepository;
     }
 
     /**
@@ -49,7 +49,7 @@ class AlbumListAction
         callable $next = null
     ) {
         $data = [
-            'albumList' => $this->albumTable->fetchAllAlbums(),
+            'albumList' => $this->albumRepository->fetchAllAlbums(),
         ];
 
         return new HtmlResponse(

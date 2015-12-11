@@ -1,31 +1,26 @@
 <?php
-namespace Album\Model\Table;
+namespace Album\Model\Repository;
 
 use Album\Model\Entity\AlbumEntity;
-use Zend\Db\Adapter\AdapterInterface;
-use Zend\Db\Exception\ErrorException;
-use Zend\Db\ResultSet\ResultSet;
-use Zend\Db\ResultSet\ResultSetInterface;
 use Zend\Db\TableGateway\TableGateway;
 
 /**
- * Class AlbumTable
+ * Class AlbumRepository
  *
- * @package Album\Model\Table
- * @method ResultSet selectWith($select)
+ * @package Album\Model\Repository
  */
-class AlbumTable extends TableGateway
+class AlbumRepository
 {
+    /** @var TableGateway */
+    private $gateway;
+
     /**
-     * AlbumTable constructor.
-     *
-     * @param AdapterInterface $adapter
-     * @param ResultSetInterface $resultSetPrototype
+     * AlbumRepository constructor.
+     * @param TableGateway $gateway
      */
-    public function __construct(
-        AdapterInterface $adapter, ResultSetInterface $resultSetPrototype
-    ) {
-        parent::__construct('album', $adapter, null, $resultSetPrototype);
+    public function __construct(TableGateway $gateway)
+    {
+        $this->gateway = $gateway;
     }
 
     /**
@@ -33,12 +28,12 @@ class AlbumTable extends TableGateway
      */
     public function fetchAllAlbums()
     {
-        $select = $this->getSql()->select();
+        $select = $this->gateway->getSql()->select();
 
         $collection = array();
 
         /** @var AlbumEntity $entity */
-        foreach ($this->selectWith($select) as $entity) {
+        foreach ($this->gateway->selectWith($select) as $entity) {
             $collection[$entity->getId()] = $entity;
         }
 
@@ -52,10 +47,10 @@ class AlbumTable extends TableGateway
      */
     public function fetchSingleAlbum($id)
     {
-        $select = $this->getSql()->select();
+        $select = $this->gateway->getSql()->select();
         $select->where->equalTo('id', $id);
 
-        return $this->selectWith($select)->current();
+        return $this->gateway->selectWith($select)->current();
     }
 
     /**
@@ -81,10 +76,10 @@ class AlbumTable extends TableGateway
     {
         $insertData = $album->getArrayCopy();
 
-        $insert = $this->getSql()->insert();
+        $insert = $this->gateway->getSql()->insert();
         $insert->values($insertData);
 
-        return $this->insertWith($insert) > 0;
+        return $this->gateway->insertWith($insert) > 0;
     }
 
     /**
@@ -96,11 +91,11 @@ class AlbumTable extends TableGateway
     {
         $updateData = $album->getArrayCopy();
 
-        $update = $this->getSql()->update();
+        $update = $this->gateway->getSql()->update();
         $update->set($updateData);
         $update->where->equalTo('id', $album->getId());
 
-        return $this->updateWith($update) > 0;
+        return $this->gateway->updateWith($update) > 0;
     }
 
     /**
@@ -110,9 +105,9 @@ class AlbumTable extends TableGateway
      */
     public function deleteAlbum(AlbumEntity $album)
     {
-        $delete = $this->getSql()->delete();
+        $delete = $this->gateway->getSql()->delete();
         $delete->where->equalTo('id', $album->getId());
 
-        return $this->deleteWith($delete) > 0;
+        return $this->gateway->deleteWith($delete) > 0;
     }
 }
