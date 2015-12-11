@@ -3,7 +3,7 @@ namespace Album\Action;
 
 use Album\Form\AlbumDataForm;
 use Album\Model\Entity\AlbumEntity;
-use Album\Model\Table\AlbumTable;
+use Album\Model\Repository\AlbumRepository;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
@@ -29,9 +29,9 @@ class AlbumCreateAction
     private $router;
 
     /**
-     * @var AlbumTable
+     * @var AlbumRepository
      */
-    private $albumTable;
+    private $albumRepository;
 
     /**
      * @var AlbumDataForm
@@ -43,17 +43,17 @@ class AlbumCreateAction
      *
      * @param TemplateRendererInterface $template
      * @param RouterInterface           $router
-     * @param AlbumTable                $albumTable
+     * @param AlbumRepository           $albumRepository
      * @param AlbumDataForm             $albumForm
      */
     public function __construct(
         TemplateRendererInterface $template, RouterInterface $router,
-        AlbumTable $albumTable, AlbumDataForm $albumForm
+        AlbumRepository $albumRepository, AlbumDataForm $albumForm
     ) {
-        $this->template   = $template;
-        $this->router     = $router;
-        $this->albumTable = $albumTable;
-        $this->albumForm  = $albumForm;
+        $this->template = $template;
+        $this->router = $router;
+        $this->albumRepository = $albumRepository;
+        $this->albumForm = $albumForm;
     }
 
     /**
@@ -78,7 +78,7 @@ class AlbumCreateAction
                 $album = new AlbumEntity();
                 $album->exchangeArray($postData);
 
-                if ($this->albumTable->saveAlbum($album)) {
+                if ($this->albumRepository->saveAlbum($album)) {
                     return new RedirectResponse(
                         $this->router->generateUri('album')
                     );
