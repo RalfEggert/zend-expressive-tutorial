@@ -5,17 +5,17 @@ use Album\Model\Entity\AlbumEntity;
 use Zend\Db\TableGateway\TableGateway;
 
 /**
- * Class AlbumRepository
+ * Class ZendDbAlbumRepository
  *
  * @package Album\Model\Repository
  */
-class AlbumRepository
+class ZendDbAlbumRepository implements AlbumRepositoryInterface
 {
     /** @var TableGateway */
     private $gateway;
 
     /**
-     * AlbumRepository constructor.
+     * ZendDbAlbumRepository constructor.
      * @param TableGateway $gateway
      */
     public function __construct(TableGateway $gateway)
@@ -43,7 +43,7 @@ class AlbumRepository
     /**
      * @param $id
      *
-     * @return mixed
+     * @return AlbumEntity
      */
     public function fetchSingleAlbum($id)
     {

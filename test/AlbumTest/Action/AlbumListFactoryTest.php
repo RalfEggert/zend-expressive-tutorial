@@ -4,7 +4,7 @@ namespace AppTest\Action;
 
 use Album\Action\AlbumListAction;
 use Album\Action\AlbumListFactory;
-use Album\Model\Repository\AlbumRepository;
+use Album\Model\Repository\AlbumRepositoryInterface;
 use Interop\Container\ContainerInterface;
 use Zend\Expressive\Router\RouterInterface;
 use Zend\Expressive\Template\TemplateRendererInterface;
@@ -29,8 +29,8 @@ class AlbumListFactoryTest extends \PHPUnit_Framework_TestCase
             ->get(TemplateRendererInterface::class)
             ->willReturn($this->prophesize(TemplateRendererInterface::class));
         $this->container
-            ->get(AlbumRepository::class)
-            ->willReturn($this->prophesize(AlbumRepository::class));
+            ->get(AlbumRepositoryInterface::class)
+            ->willReturn($this->prophesize(AlbumRepositoryInterface::class));
 
         $action = $factory($this->container->reveal());
 

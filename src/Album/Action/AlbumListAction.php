@@ -1,7 +1,7 @@
 <?php
 namespace Album\Action;
 
-use Album\Model\Repository\AlbumRepository;
+use Album\Model\Repository\AlbumRepositoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
@@ -20,7 +20,7 @@ class AlbumListAction
     private $template;
 
     /**
-     * @var AlbumRepository
+     * @var AlbumRepositoryInterface
      */
     private $albumRepository;
 
@@ -28,10 +28,10 @@ class AlbumListAction
      * AlbumListAction constructor.
      *
      * @param TemplateRendererInterface $template
-     * @param AlbumRepository           $albumRepository
+     * @param AlbumRepositoryInterface $albumRepository
      */
     public function __construct(
-        TemplateRendererInterface $template, AlbumRepository $albumRepository
+        TemplateRendererInterface $template, AlbumRepositoryInterface $albumRepository
     ) {
         $this->template        = $template;
         $this->albumRepository = $albumRepository;
