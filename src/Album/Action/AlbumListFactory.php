@@ -19,7 +19,7 @@ class AlbumListFactory
      */
     public function __invoke(ContainerInterface $container)
     {
-        $template = $container->get(TemplateRendererInterface::class);
+        $template   = $container->get(TemplateRendererInterface::class);
         $albumTable = $container->get(AlbumTable::class);
 
         return new AlbumListAction($template, $albumTable);
