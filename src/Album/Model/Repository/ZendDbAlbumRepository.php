@@ -55,22 +55,17 @@ class ZendDbAlbumRepository implements AlbumRepositoryInterface
 
     /**
      * @param AlbumEntity $album
-     *
-     * @return bool
      */
     public function saveAlbum(AlbumEntity $album)
     {
         if ($album->getId()) {
-            return $this->updateAlbum($album);
-        } else {
-            return $this->insertAlbum($album);
+            $this->updateAlbum($album);
         }
+        $this->insertAlbum($album);
     }
 
     /**
      * @param AlbumEntity $album
-     *
-     * @return bool
      */
     private function insertAlbum(AlbumEntity $album)
     {
@@ -79,13 +74,11 @@ class ZendDbAlbumRepository implements AlbumRepositoryInterface
         $insert = $this->gateway->getSql()->insert();
         $insert->values($insertData);
 
-        return $this->gateway->insertWith($insert) > 0;
+        $this->gateway->insertWith($insert);
     }
 
     /**
      * @param AlbumEntity $album
-     *
-     * @return bool
      */
     private function updateAlbum(AlbumEntity $album)
     {
@@ -95,19 +88,17 @@ class ZendDbAlbumRepository implements AlbumRepositoryInterface
         $update->set($updateData);
         $update->where->equalTo('id', $album->getId());
 
-        return $this->gateway->updateWith($update) > 0;
+        $this->gateway->updateWith($update);
     }
 
     /**
      * @param AlbumEntity $album
-     *
-     * @return bool
      */
     public function deleteAlbum(AlbumEntity $album)
     {
         $delete = $this->gateway->getSql()->delete();
         $delete->where->equalTo('id', $album->getId());
 
-        return $this->gateway->deleteWith($delete) > 0;
+        $this->gateway->deleteWith($delete);
     }
 }

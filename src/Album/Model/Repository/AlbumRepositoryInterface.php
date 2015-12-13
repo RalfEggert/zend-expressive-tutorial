@@ -19,15 +19,11 @@ interface AlbumRepositoryInterface
 
     /**
      * @param AlbumEntity $album
-     *
-     * @return bool
      */
     public function saveAlbum(AlbumEntity $album);
 
     /**
      * @param AlbumEntity $album
-     *
-     * @return bool
      */
     public function deleteAlbum(AlbumEntity $album);
 }
