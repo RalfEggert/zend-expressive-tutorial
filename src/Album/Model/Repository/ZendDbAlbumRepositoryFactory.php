@@ -9,16 +9,16 @@ use Zend\Db\TableGateway\TableGateway;
 use Zend\Hydrator\ArraySerializable;
 
 /**
- * Class AlbumRepositoryFactory
+ * Class ZendDbAlbumRepositoryFactory
  *
  * @package Album\Model\Repository
  */
-class AlbumRepositoryFactory
+class ZendDbAlbumRepositoryFactory
 {
     /**
      * @param ContainerInterface $container
      *
-     * @return AlbumRepository
+     * @return AlbumRepositoryInterface
      */
     public function __invoke(ContainerInterface $container)
     {
@@ -32,6 +32,6 @@ class AlbumRepositoryFactory
             'album', $adapter, null, $resultSetPrototype
         );
 
-        return new AlbumRepository($gateway);
+        return new ZendDbAlbumRepository($gateway);
     }
 }

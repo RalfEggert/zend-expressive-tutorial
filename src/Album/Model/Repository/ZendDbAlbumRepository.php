@@ -5,17 +5,17 @@ use Album\Model\Entity\AlbumEntity;
 use Zend\Db\TableGateway\TableGateway;
 
 /**
- * Class AlbumRepository
+ * Class ZendDbAlbumRepository
  *
  * @package Album\Model\Repository
  */
-class AlbumRepository
+class ZendDbAlbumRepository implements AlbumRepositoryInterface
 {
     /** @var TableGateway */
     private $gateway;
 
     /**
-     * AlbumRepository constructor.
+     * ZendDbAlbumRepository constructor.
      * @param TableGateway $gateway
      */
     public function __construct(TableGateway $gateway)
@@ -43,7 +43,7 @@ class AlbumRepository
     /**
      * @param $id
      *
-     * @return mixed
+     * @return AlbumEntity
      */
     public function fetchSingleAlbum($id)
     {
@@ -55,22 +55,17 @@ class AlbumRepository
 
     /**
      * @param AlbumEntity $album
-     *
-     * @return bool
      */
     public function saveAlbum(AlbumEntity $album)
     {
         if ($album->getId()) {
-            return $this->updateAlbum($album);
-        } else {
-            return $this->insertAlbum($album);
+            $this->updateAlbum($album);
         }
+        $this->insertAlbum($album);
     }
 
     /**
      * @param AlbumEntity $album
-     *
-     * @return bool
      */
     private function insertAlbum(AlbumEntity $album)
     {
@@ -79,13 +74,11 @@ class AlbumRepository
         $insert = $this->gateway->getSql()->insert();
         $insert->values($insertData);
 
-        return $this->gateway->insertWith($insert) > 0;
+        $this->gateway->insertWith($insert);
     }
 
     /**
      * @param AlbumEntity $album
-     *
-     * @return bool
      */
     private function updateAlbum(AlbumEntity $album)
     {
@@ -95,19 +88,17 @@ class AlbumRepository
         $update->set($updateData);
         $update->where->equalTo('id', $album->getId());
 
-        return $this->gateway->updateWith($update) > 0;
+        $this->gateway->updateWith($update);
     }
 
     /**
      * @param AlbumEntity $album
-     *
-     * @return bool
      */
     public function deleteAlbum(AlbumEntity $album)
     {
         $delete = $this->gateway->getSql()->delete();
         $delete->where->equalTo('id', $album->getId());
 
-        return $this->gateway->deleteWith($delete) > 0;
+        $this->gateway->deleteWith($delete);
     }
 }
