@@ -10,10 +10,14 @@ return [
             Album\Form\AlbumDataForm::class =>
                 Album\Form\AlbumDataFormFactory::class,
 
-            Album\Model\Repository\AlbumRepository::class =>
-                Album\Model\Repository\AlbumRepositoryFactory::class,
             Album\Model\InputFilter\AlbumInputFilter::class =>
                 Album\Model\InputFilter\AlbumInputFilterFactory::class,
+
+            Album\Model\Repository\AlbumRepositoryInterface::class =>
+                Album\Model\Repository\ZendDbAlbumRepositoryFactory::class,
+
+            Album\Db\AlbumTableGatewayInterface::class =>
+                Album\Db\AlbumTableGatewayFactory::class,
         ],
     ],
 

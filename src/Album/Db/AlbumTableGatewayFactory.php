@@ -1,24 +1,23 @@
 <?php
-namespace Album\Model\Repository;
+namespace Album\Db;
 
 use Album\Model\Entity\AlbumEntity;
 use Interop\Container\ContainerInterface;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\HydratingResultSet;
-use Zend\Db\TableGateway\TableGateway;
 use Zend\Hydrator\ArraySerializable;
 
 /**
- * Class AlbumRepositoryFactory
+ * Class AlbumTableGatewayFactory
  *
- * @package Album\Model\Repository
+ * @package Album\Db
  */
-class AlbumRepositoryFactory
+class AlbumTableGatewayFactory
 {
     /**
      * @param ContainerInterface $container
      *
-     * @return AlbumRepository
+     * @return AlbumTableGateway
      */
     public function __invoke(ContainerInterface $container)
     {
@@ -28,10 +27,6 @@ class AlbumRepositoryFactory
             new ArraySerializable(), new AlbumEntity()
         );
 
-        $gateway = new TableGateway(
-            'album', $adapter, null, $resultSetPrototype
-        );
-
-        return new AlbumRepository($gateway);
+        return new AlbumTableGateway($adapter, $resultSetPrototype);
     }
 }
