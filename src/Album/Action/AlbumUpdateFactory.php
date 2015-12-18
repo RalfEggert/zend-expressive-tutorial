@@ -2,7 +2,7 @@
 namespace Album\Action;
 
 use Album\Form\AlbumDataForm;
-use Album\Model\Repository\AlbumRepository;
+use Album\Model\Repository\AlbumRepositoryInterface;
 use Interop\Container\ContainerInterface;
 use Zend\Expressive\Router\RouterInterface;
 use Zend\Expressive\Template\TemplateRendererInterface;
@@ -23,7 +23,7 @@ class AlbumUpdateFactory
     {
         $template        = $container->get(TemplateRendererInterface::class);
         $router          = $container->get(RouterInterface::class);
-        $albumRepository = $container->get(AlbumRepository::class);
+        $albumRepository = $container->get(AlbumRepositoryInterface::class);
         $albumForm       = $container->get(AlbumDataForm::class);
 
         return new AlbumUpdateAction(
