@@ -2,7 +2,6 @@
 namespace Album\Action;
 
 use Album\Form\AlbumDataForm;
-use Album\Model\Entity\AlbumEntity;
 use Album\Model\Repository\AlbumRepositoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -12,17 +11,12 @@ use Zend\Expressive\Router\RouterInterface;
 use Zend\Expressive\Template\TemplateRendererInterface;
 
 /**
- * Class AlbumCreateAction
+ * Class AlbumUpdateHandleAction
  *
  * @package Album\Action
  */
-class AlbumCreateAction
+class AlbumUpdateHandleAction
 {
-    /**
-     * @var TemplateRendererInterface
-     */
-    private $template;
-
     /**
      * @var RouterInterface
      */
@@ -39,20 +33,17 @@ class AlbumCreateAction
     private $albumForm;
 
     /**
-     * AlbumCreateAction constructor.
+     * AlbumUpdateHandleAction constructor.
      *
-     * @param TemplateRendererInterface $template
      * @param RouterInterface           $router
      * @param AlbumRepositoryInterface           $albumRepository
      * @param AlbumDataForm             $albumForm
      */
     public function __construct(
-        TemplateRendererInterface $template,
         RouterInterface $router,
         AlbumRepositoryInterface $albumRepository,
         AlbumDataForm $albumForm
     ) {
-        $this->template = $template;
         $this->router = $router;
         $this->albumRepository = $albumRepository;
         $this->albumForm = $albumForm;
@@ -66,39 +57,29 @@ class AlbumCreateAction
      * @return HtmlResponse
      */
     public function __invoke(
-        ServerRequestInterface $request, ResponseInterface $response,
+        ServerRequestInterface $request,
+        ResponseInterface $response,
         callable $next = null
     ) {
-        $message = 'Please enter the new album!';
+        $id = $request->getAttribute('id');
 
-        if ($request->getMethod() == 'POST') {
-            $postData = $request->getParsedBody();
+        $postData = $request->getParsedBody();
 
-            $this->albumForm->setData($postData);
+        $this->albumForm->setData($postData);
 
-            if ($this->albumForm->isValid()) {
-                $album = new AlbumEntity();
-                $album->exchangeArray($postData);
+        if ($this->albumForm->isValid()) {
+            $postData['id'] = $id;
 
-                if ($this->albumRepository->saveAlbum($album)) {
-                    return new RedirectResponse(
-                        $this->router->generateUri('album')
-                    );
-                } else {
-                    $message = 'The new album could not be saved!';
-                }
-            } else {
-                $message = 'Please check your input!';
-            }
+            $album = $this->albumRepository->fetchSingleAlbum($id);
+            $album->exchangeArray($postData);
+
+            $this->albumRepository->saveAlbum($album);
+
+            return new RedirectResponse(
+                $this->router->generateUri('album')
+            );
         }
 
-        $data = [
-            'albumForm' => $this->albumForm,
-            'message'   => $message,
-        ];
-
-        return new HtmlResponse(
-            $this->template->render('album::create', $data)
-        );
+        return $next($request, $response);
     }
 }

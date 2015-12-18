@@ -6,26 +6,19 @@ use Album\Model\Repository\AlbumRepositoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
-use Zend\Diactoros\Response\RedirectResponse;
-use Zend\Expressive\Router\RouterInterface;
 use Zend\Expressive\Template\TemplateRendererInterface;
 
 /**
- * Class AlbumUpdateAction
+ * Class AlbumUpdateFormAction
  *
  * @package Album\Action
  */
-class AlbumUpdateAction
+class AlbumUpdateFormAction
 {
     /**
      * @var TemplateRendererInterface
      */
     private $template;
-
-    /**
-     * @var RouterInterface
-     */
-    private $router;
 
     /**
      * @var AlbumRepositoryInterface
@@ -38,23 +31,20 @@ class AlbumUpdateAction
     private $albumForm;
 
     /**
-     * AlbumUpdateAction constructor.
+     * AlbumUpdateFormAction constructor.
      *
      * @param TemplateRendererInterface $template
-     * @param RouterInterface           $router
-     * @param AlbumRepositoryInterface           $albumRepository
+     * @param AlbumRepositoryInterface  $albumRepository
      * @param AlbumDataForm             $albumForm
      */
     public function __construct(
         TemplateRendererInterface $template,
-        RouterInterface $router,
         AlbumRepositoryInterface $albumRepository,
         AlbumDataForm $albumForm
     ) {
-        $this->template = $template;
-        $this->router = $router;
+        $this->template        = $template;
         $this->albumRepository = $albumRepository;
-        $this->albumForm = $albumForm;
+        $this->albumForm       = $albumForm;
     }
 
     /**
@@ -65,42 +55,26 @@ class AlbumUpdateAction
      * @return HtmlResponse
      */
     public function __invoke(
-        ServerRequestInterface $request, ResponseInterface $response,
+        ServerRequestInterface $request,
+        ResponseInterface $response,
         callable $next = null
     ) {
-        $message = 'Please change the album!';
-
         $id = $request->getAttribute('id');
 
         $album = $this->albumRepository->fetchSingleAlbum($id);
 
-        if ($request->getMethod() == 'POST') {
-            $postData = $request->getParsedBody();
-
-            $this->albumForm->setData($postData);
-
-            if ($this->albumForm->isValid()) {
-                $postData['id'] = $id;
-
-                $album->exchangeArray($postData);
-
-                if ($this->albumRepository->saveAlbum($album)) {
-                    return new RedirectResponse(
-                        $this->router->generateUri('album')
-                    );
-                } else {
-                    $message = 'The album was not changed!';
-                }
-            } else {
-                $message = 'Please check your input!';
-            }
+        if ($this->albumForm->getMessages()) {
+            $message = 'Please check your input!';
         } else {
+            $message = 'Please change the album!';
+
             $this->albumForm->bind($album);
         }
 
         $data = [
-            'albumForm' => $this->albumForm,
-            'message'   => $message,
+            'albumForm'   => $this->albumForm,
+            'albumEntity' => $album,
+            'message'     => $message,
         ];
 
         return new HtmlResponse(
