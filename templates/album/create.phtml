@@ -3,6 +3,7 @@ use Album\Form\AlbumDataForm;
 
 /** @var AlbumDataForm $form */
 $form = $this->albumForm;
+$form->setAttribute('action', $this->url('album-create-handle'));
 
 $this->headTitle('Create new album');
 ?>

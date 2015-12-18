@@ -2,10 +2,12 @@
 return [
     'dependencies' => [
         'factories' => [
-            Album\Action\AlbumListAction::class =>
+            Album\Action\AlbumListAction::class         =>
                 Album\Action\AlbumListFactory::class,
-            Album\Action\AlbumCreateAction::class =>
-                Album\Action\AlbumCreateFactory::class,
+            Album\Action\AlbumCreateFormAction::class   =>
+                Album\Action\AlbumCreateFormFactory::class,
+            Album\Action\AlbumCreateHandleAction::class =>
+                Album\Action\AlbumCreateHandleFactory::class,
 
             Album\Form\AlbumDataForm::class =>
                 Album\Form\AlbumDataFormFactory::class,
@@ -23,22 +25,31 @@ return [
 
     'routes' => [
         [
-            'name' => 'album',
-            'path' => '/album',
-            'middleware' => Album\Action\AlbumListAction::class,
+            'name'            => 'album',
+            'path'            => '/album',
+            'middleware'      => Album\Action\AlbumListAction::class,
             'allowed_methods' => ['GET'],
         ],
         [
             'name'            => 'album-create',
             'path'            => '/album/create',
-            'middleware'      => Album\Action\AlbumCreateAction::class,
-            'allowed_methods' => ['GET', 'POST'],
+            'middleware'      => Album\Action\AlbumCreateFormAction::class,
+            'allowed_methods' => ['GET'],
+        ],
+        [
+            'name'            => 'album-create-handle',
+            'path'            => '/album/create/handle',
+            'middleware'      => [
+                Album\Action\AlbumCreateHandleAction::class,
+                Album\Action\AlbumCreateFormAction::class,
+            ],
+            'allowed_methods' => ['POST'],
         ],
     ],
 
     'templates' => [
         'paths' => [
-            'album'    => ['templates/album'],
+            'album' => ['templates/album'],
         ],
     ],
 ];
