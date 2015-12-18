@@ -1,8 +1,15 @@
 <?php
 use Album\Form\AlbumDataForm;
+use Album\Model\Entity\AlbumEntity;
+
+/** @var AlbumEntity $album */
+$album = $this->albumEntity;
 
 /** @var AlbumDataForm $form */
 $form = $this->albumForm;
+$form->setAttribute(
+    'action', $this->url('album-update-handle', ['id' => $album->getId()])
+);
 
 $this->headTitle('Edit album');
 ?>

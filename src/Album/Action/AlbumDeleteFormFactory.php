@@ -1,33 +1,31 @@
 <?php
 namespace Album\Action;
 
-use Album\Form\AlbumDataForm;
+use Album\Form\AlbumDeleteForm;
 use Album\Model\Repository\AlbumRepositoryInterface;
 use Interop\Container\ContainerInterface;
-use Zend\Expressive\Router\RouterInterface;
 use Zend\Expressive\Template\TemplateRendererInterface;
 
 /**
- * Class AlbumCreateFactory
+ * Class AlbumDeleteFormFactory
  *
  * @package Album\Action
  */
-class AlbumCreateFactory
+class AlbumDeleteFormFactory
 {
     /**
      * @param ContainerInterface $container
      *
-     * @return AlbumCreateAction
+     * @return AlbumDeleteFormAction
      */
     public function __invoke(ContainerInterface $container)
     {
         $template        = $container->get(TemplateRendererInterface::class);
-        $router          = $container->get(RouterInterface::class);
         $albumRepository = $container->get(AlbumRepositoryInterface::class);
-        $albumForm       = $container->get(AlbumDataForm::class);
+        $albumForm       = $container->get(AlbumDeleteForm::class);
 
-        return new AlbumCreateAction(
-            $template, $router, $albumRepository, $albumForm
+        return new AlbumDeleteFormAction(
+            $template, $albumRepository, $albumForm
         );
     }
 }

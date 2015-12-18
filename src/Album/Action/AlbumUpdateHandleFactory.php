@@ -8,26 +8,25 @@ use Zend\Expressive\Router\RouterInterface;
 use Zend\Expressive\Template\TemplateRendererInterface;
 
 /**
- * Class AlbumUpdateFactory
+ * Class AlbumUpdateHandleFactory
  *
  * @package Album\Action
  */
-class AlbumUpdateFactory
+class AlbumUpdateHandleFactory
 {
     /**
      * @param ContainerInterface $container
      *
-     * @return AlbumUpdateAction
+     * @return AlbumUpdateHandleAction
      */
     public function __invoke(ContainerInterface $container)
     {
-        $template        = $container->get(TemplateRendererInterface::class);
         $router          = $container->get(RouterInterface::class);
         $albumRepository = $container->get(AlbumRepositoryInterface::class);
         $albumForm       = $container->get(AlbumDataForm::class);
 
-        return new AlbumUpdateAction(
-            $template, $router, $albumRepository, $albumForm
+        return new AlbumUpdateHandleAction(
+            $router, $albumRepository, $albumForm
         );
     }
 }

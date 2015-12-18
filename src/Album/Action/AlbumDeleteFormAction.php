@@ -6,26 +6,19 @@ use Album\Model\Repository\AlbumRepositoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
-use Zend\Diactoros\Response\RedirectResponse;
-use Zend\Expressive\Router\RouterInterface;
 use Zend\Expressive\Template\TemplateRendererInterface;
 
 /**
- * Class AlbumDeleteAction
+ * Class AlbumDeleteFormAction
  *
  * @package Album\Action
  */
-class AlbumDeleteAction
+class AlbumDeleteFormAction
 {
     /**
      * @var TemplateRendererInterface
      */
     private $template;
-
-    /**
-     * @var RouterInterface
-     */
-    private $router;
 
     /**
      * @var AlbumRepositoryInterface
@@ -38,23 +31,20 @@ class AlbumDeleteAction
     private $albumForm;
 
     /**
-     * AlbumDeleteAction constructor.
+     * AlbumDeleteFormAction constructor.
      *
      * @param TemplateRendererInterface $template
-     * @param RouterInterface           $router
-     * @param AlbumRepositoryInterface           $albumRepository
+     * @param AlbumRepositoryInterface  $albumRepository
      * @param AlbumDeleteForm           $albumForm
      */
     public function __construct(
         TemplateRendererInterface $template,
-        RouterInterface $router,
         AlbumRepositoryInterface $albumRepository,
         AlbumDeleteForm $albumForm
     ) {
-        $this->template = $template;
-        $this->router = $router;
+        $this->template        = $template;
         $this->albumRepository = $albumRepository;
-        $this->albumForm = $albumForm;
+        $this->albumForm       = $albumForm;
     }
 
     /**
@@ -65,28 +55,17 @@ class AlbumDeleteAction
      * @return HtmlResponse
      */
     public function __invoke(
-        ServerRequestInterface $request, ResponseInterface $response,
+        ServerRequestInterface $request,
+        ResponseInterface $response,
         callable $next = null
     ) {
-        $message = 'You you want to delete this album!';
-
         $id = $request->getAttribute('id');
 
         $album = $this->albumRepository->fetchSingleAlbum($id);
 
-        if ($request->getMethod() == 'POST') {
-            $postData = $request->getParsedBody();
+        $message = 'Do you want to delete this album?';
 
-            if (isset($postData['delete_album_yes'])) {
-                $this->albumRepository->deleteAlbum($album);
-            }
-            
-            return new RedirectResponse(
-                $this->router->generateUri('album')
-            );
-        } else {
-            $this->albumForm->bind($album);
-        }
+        $this->albumForm->bind($album);
 
         $data = [
             'albumEntity' => $album,
