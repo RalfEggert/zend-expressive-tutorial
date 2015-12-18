@@ -2,7 +2,7 @@
 namespace Album\Action;
 
 use Album\Form\AlbumDeleteForm;
-use Album\Model\Repository\AlbumRepository;
+use Album\Model\Repository\AlbumRepositoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
@@ -28,7 +28,7 @@ class AlbumDeleteAction
     private $router;
 
     /**
-     * @var AlbumRepository
+     * @var AlbumRepositoryInterface
      */
     private $albumRepository;
 
@@ -42,12 +42,14 @@ class AlbumDeleteAction
      *
      * @param TemplateRendererInterface $template
      * @param RouterInterface           $router
-     * @param AlbumRepository           $albumRepository
+     * @param AlbumRepositoryInterface           $albumRepository
      * @param AlbumDeleteForm           $albumForm
      */
     public function __construct(
-        TemplateRendererInterface $template, RouterInterface $router,
-        AlbumRepository $albumRepository, AlbumDeleteForm $albumForm
+        TemplateRendererInterface $template,
+        RouterInterface $router,
+        AlbumRepositoryInterface $albumRepository,
+        AlbumDeleteForm $albumForm
     ) {
         $this->template = $template;
         $this->router = $router;

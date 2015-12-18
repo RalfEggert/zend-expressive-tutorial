@@ -3,7 +3,7 @@ namespace Album\Action;
 
 use Album\Form\AlbumDataForm;
 use Album\Model\Entity\AlbumEntity;
-use Album\Model\Repository\AlbumRepository;
+use Album\Model\Repository\AlbumRepositoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
@@ -29,7 +29,7 @@ class AlbumCreateAction
     private $router;
 
     /**
-     * @var AlbumRepository
+     * @var AlbumRepositoryInterface
      */
     private $albumRepository;
 
@@ -43,12 +43,14 @@ class AlbumCreateAction
      *
      * @param TemplateRendererInterface $template
      * @param RouterInterface           $router
-     * @param AlbumRepository           $albumRepository
+     * @param AlbumRepositoryInterface           $albumRepository
      * @param AlbumDataForm             $albumForm
      */
     public function __construct(
-        TemplateRendererInterface $template, RouterInterface $router,
-        AlbumRepository $albumRepository, AlbumDataForm $albumForm
+        TemplateRendererInterface $template,
+        RouterInterface $router,
+        AlbumRepositoryInterface $albumRepository,
+        AlbumDataForm $albumForm
     ) {
         $this->template = $template;
         $this->router = $router;
