@@ -3,7 +3,7 @@
 namespace AlbumTest\Action;
 
 use Album\Action\AlbumListAction;
-use Album\Model\Repository\AlbumRepository;
+use Album\Model\Repository\AlbumRepositoryInterface;
 use PHPUnit_Framework_TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -30,7 +30,7 @@ class AlbumListActionTest extends PHPUnit_Framework_TestCase
 
     public function testActionRendersAlbumList()
     {
-        $albumRepository = $this->prophesize(AlbumRepository::class);
+        $albumRepository = $this->prophesize(AlbumRepositoryInterface::class);
         $albumRepository->fetchAllAlbums()->shouldBeCalled()->willReturn(['album1', 'album2']);
         $renderer = $this->prophesize(TemplateRendererInterface::class);
         $renderer->render('album::list', ['albumList' => ['album1', 'album2']])->shouldBeCalled()->willReturn('BODY');

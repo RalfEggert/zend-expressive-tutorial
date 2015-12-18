@@ -5,8 +5,11 @@ return [
             Album\Action\AlbumListAction::class =>
                 Album\Action\AlbumListFactory::class,
 
-            Album\Model\Repository\AlbumRepository::class =>
-                Album\Model\Repository\AlbumRepositoryFactory::class,
+            Album\Model\Repository\AlbumRepositoryInterface::class =>
+                Album\Model\Repository\ZendDbAlbumRepositoryFactory::class,
+
+            Album\Db\AlbumTableGatewayInterface::class =>
+                Album\Db\AlbumTableGatewayFactory::class,
         ],
     ],
 
