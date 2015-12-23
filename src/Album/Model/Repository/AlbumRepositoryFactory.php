@@ -1,7 +1,7 @@
 <?php
 namespace Album\Model\Repository;
 
-use Album\Db\AlbumTableGatewayInterface;
+use Album\Model\Storage\AlbumStorageInterface;
 use Interop\Container\ContainerInterface;
 
 /**
@@ -9,17 +9,17 @@ use Interop\Container\ContainerInterface;
  *
  * @package Album\Model\Repository
  */
-class ZendDbAlbumRepositoryFactory
+class AlbumRepositoryFactory
 {
     /**
      * @param ContainerInterface $container
      *
-     * @return ZendDbAlbumRepository
+     * @return AlbumRepository
      */
     public function __invoke(ContainerInterface $container)
     {
-        $tableGateway = $container->get(AlbumTableGatewayInterface::class);
+        $albumStorage = $container->get(AlbumStorageInterface::class);
 
-        return new ZendDbAlbumRepository($tableGateway);
+        return new AlbumRepository($albumStorage);
     }
 }
