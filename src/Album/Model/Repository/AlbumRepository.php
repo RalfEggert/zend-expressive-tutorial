@@ -2,28 +2,28 @@
 namespace Album\Model\Repository;
 
 use Album\Model\Entity\AlbumEntity;
-use Album\Db\AlbumTableGatewayInterface;
+use Album\Model\Storage\AlbumStorageInterface;
 
 /**
  * Class ZendDbAlbumRepository
  *
  * @package Album\Model\Repository
  */
-class ZendDbAlbumRepository implements AlbumRepositoryInterface
+class AlbumRepository implements AlbumRepositoryInterface
 {
     /**
-     * @var AlbumTableGatewayInterface
+     * @var AlbumStorageInterface
      */
-    private $albumSource;
+    private $albumStorage;
 
     /**
      * AlbumRepository constructor.
      *
-     * @param AlbumTableGatewayInterface $albumSource
+     * @param AlbumStorageInterface $albumStorage
      */
-    public function __construct(AlbumTableGatewayInterface $albumSource)
+    public function __construct(AlbumStorageInterface $albumStorage)
     {
-        $this->albumSource = $albumSource;
+        $this->albumStorage = $albumStorage;
     }
 
     /**
@@ -33,7 +33,7 @@ class ZendDbAlbumRepository implements AlbumRepositoryInterface
      */
     public function fetchAllAlbums()
     {
-        return $this->albumSource->fetchAlbumList();
+        return $this->albumStorage->fetchAlbumList();
     }
 
     /**
@@ -45,7 +45,7 @@ class ZendDbAlbumRepository implements AlbumRepositoryInterface
      */
     public function fetchSingleAlbum($id)
     {
-        return $this->albumSource->fetchAlbumById($id);
+        return $this->albumStorage->fetchAlbumById($id);
     }
 
     /**
@@ -58,9 +58,9 @@ class ZendDbAlbumRepository implements AlbumRepositoryInterface
     public function saveAlbum(AlbumEntity $album)
     {
         if (!$album->getId()) {
-            return $this->albumSource->insertAlbum($album);
+            return $this->albumStorage->insertAlbum($album);
         } else {
-            return $this->albumSource->updateAlbum($album);
+            return $this->albumStorage->updateAlbum($album);
         }
     }
 
@@ -73,6 +73,6 @@ class ZendDbAlbumRepository implements AlbumRepositoryInterface
      */
     public function deleteAlbum(AlbumEntity $album)
     {
-        return $this->albumSource->deleteAlbum($album);
+        return $this->albumStorage->deleteAlbum($album);
     }
 }

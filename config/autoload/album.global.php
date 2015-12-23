@@ -6,9 +6,9 @@ return [
                 Album\Action\AlbumListFactory::class,
 
             Album\Model\Repository\AlbumRepositoryInterface::class =>
-                Album\Model\Repository\ZendDbAlbumRepositoryFactory::class,
+                Album\Model\Repository\AlbumRepositoryFactory::class,
 
-            Album\Db\AlbumTableGatewayInterface::class =>
+            Album\Model\Storage\AlbumStorageInterface::class =>
                 Album\Db\AlbumTableGatewayFactory::class,
         ],
     ],
