@@ -2,6 +2,7 @@
 namespace Album\Db;
 
 use Album\Model\Entity\AlbumEntity;
+use Album\Model\Storage\AlbumStorageInterface;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\ResultSetInterface;
 use Zend\Db\TableGateway\TableGateway;
@@ -11,7 +12,7 @@ use Zend\Db\TableGateway\TableGateway;
  *
  * @package Album\Db
  */
-class AlbumTableGateway extends TableGateway implements AlbumTableGatewayInterface
+class AlbumTableGateway extends TableGateway implements AlbumStorageInterface
 {
     /**
      * AlbumTableGateway constructor.
