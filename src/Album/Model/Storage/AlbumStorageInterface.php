@@ -1,15 +1,14 @@
 <?php
-namespace Album\Db;
+namespace Album\Model\Storage;
 
 use Album\Model\Entity\AlbumEntity;
-use Zend\Db\TableGateway\TableGatewayInterface;
 
 /**
- * Interface AlbumTableGatewayInterface
+ * Interface AlbumStorageInterface
  *
- * @package Album\Db
+ * @package Album\Model\Storage
  */
-interface AlbumTableGatewayInterface extends TableGatewayInterface
+interface AlbumStorageInterface
 {
     /**
      * Fetch album list
