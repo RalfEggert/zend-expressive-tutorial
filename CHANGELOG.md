@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 1.0.0rc5 - 2015-12-22
+
+Fifth release candidate.
+
+### Added
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- [#42](https://github.com/zendframework/zend-expressive-skeleton/pull/42)
+  fixes some grammatical issues in the questions presented by the installer.
+- [#45](https://github.com/zendframework/zend-expressive-skeleton/pull/45)
+  fixes how JS and CSS assets are added to zend-view templates.
+- [#48](https://github.com/zendframework/zend-expressive-skeleton/pull/48)
+  adds unit tests for the `OptionalPackages` class (which provides the Composer
+  installer scripts).
+- [#49](https://github.com/zendframework/zend-expressive-skeleton/pull/49)
+  updates the Pimple support to Pimple v3, ensuring Pimple users are using the
+  latest stable release.
+
 ## 1.0.0rc4 - 2015-12-09
 
 Fourth release candidate.
