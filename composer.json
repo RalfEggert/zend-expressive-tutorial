@@ -6,7 +6,7 @@
     "authors": [
         {
             "name": "Geert Eltink",
-            "homepage": "https://xtreamwayz.github.io/"
+            "homepage": "https://xtreamwayz.com/"
         }
     ],
     "extra": {
@@ -19,7 +19,7 @@
         "php": "^5.5 || ^7.0",
         "roave/security-advisories": "dev-master",
         "zendframework/zend-expressive": "~1.0.0@rc || ^1.0",
-        "zendframework/zend-expressive-helpers": "^1.2",
+        "zendframework/zend-expressive-helpers": "^1.3",
         "zendframework/zend-stdlib": "~2.7",
         "zendframework/zend-expressive-zendrouter": "^1.0",
         "zendframework/zend-servicemanager": "^2.5",
@@ -29,7 +29,8 @@
     "require-dev": {
         "phpunit/phpunit": "^4.8",
         "squizlabs/php_codesniffer": "^2.3",
-        "filp/whoops": "^1.1"
+        "filp/whoops": "^1.1",
+        "xtreamwayz/pimple-container-interop": "^1.0"
     },
     "autoload": {
         "psr-4": {
