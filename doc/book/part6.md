@@ -1,0 +1,3 @@
+# Part 6: Refactor application structure
+
+to be continued...

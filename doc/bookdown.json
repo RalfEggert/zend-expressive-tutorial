@@ -1,0 +1,12 @@
+{
+  "title": "Zend\\Expressive tutorial",
+  "content": [
+    {"Part 1: Setup the application": "book/part1.md"},
+    {"Part 2: Album list middleware": "book/part2.md"},
+    {"Part 3: Model and database": "book/part3.md"},
+    {"Part 4: Forms and input filter": "book/part4.md"},
+    {"Part 5: Updating and deleting albums": "book/part5.md"},
+    {"Part 6: Refactor application structure": "book/part6.md"}
+  ],
+  "target": "./html/"
+}
