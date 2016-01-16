@@ -50,6 +50,17 @@ Again, use composer to start the build-in web server:
 $ composer serve
 ```
 
+By default composer will terminate with a `ProcessTimedOutException` after
+300 seconds. Via the `COMPOSER_PROCESS_TIMEOUT` environment variable you
+may change that behavior.
+
+```
+$ export COMPOSER_PROCESS_TIMEOUT=86400
+$ composer serve
+or
+$ COMPOSER_PROCESS_TIMEOUT=86400 composer serve
+```
+
 This starts up a web server on localhost port 8080; browse to 
 [http://localhost:8080/](http://localhost:8080/) to see if your 
 application responds correctly!
