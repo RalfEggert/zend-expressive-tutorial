@@ -49,6 +49,19 @@ of the `AlbumListAction` class. Within the `__invoke()` method a
 used to render the album list template. Since we have no data to output 
 yet, an empty array is passed to the renderer.
 
+Note that the `HtmlResponse` class accepts a status code and headers as 
+additional arguments. To output the status code and response headers generated
+by middleware executed with a higher priority you need to pass them manually
+to the `HtmlResponse`.
+
+```php
+return new HtmlResponse(
+    $this->template->render('album::list', $data),
+    $response->getStatusCode(), 
+    $response->getHeaders()
+);
+```
+
 ## Setup factory for album list middleware
 
 To work properly, the `AlbumListAction` needs a factory to inject the
