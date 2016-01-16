@@ -8,5 +8,5 @@
     {"Part 5: Updating and deleting albums": "book/part5.md"},
     {"Part 6: Refactor application structure": "book/part6.md"}
   ],
-  "target": "./html"
+  "target": "./html/"
 }
