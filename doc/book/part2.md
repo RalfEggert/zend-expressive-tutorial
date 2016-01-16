@@ -52,12 +52,14 @@ yet, an empty array is passed to the renderer.
 A few words about the used namespaces, interfaces and classes.
 
 * The `Psr\Http\Message` package contains a set of standardized HTTP 
-  message interfaces which are also known as PSR-7. A lot of PHP frameworks
+  message interfaces which are also known as 
+  [PSR-7](http://www.php-fig.org/psr/psr-7/). A lot of PHP frameworks
   and open source projects implement these interfaces within their 
   projects.
   
-* The component `Zend\Diactoros` contains the Zend Framework specific 
-  implementations of the mentioned PSR-7 HTTP message interfaces. 
+* The component [`Zend\Diactoros`](https://github.com/zendframework/zend-diactoros) 
+  contains the Zend Framework specific implementations of the mentioned 
+  PSR-7 HTTP message interfaces. 
   
 * The `HtmlResponse` allows to create responses with HTML strings. By 
   default these responses have a 200 HTTP status code and a content-type
@@ -104,9 +106,10 @@ template renderer is requested from the DI container by using its class
 name. This template renderer instance is injected into the constructor of
 the `AlbumListAction` class which is returned by the factory.
 
-The used `Interop\Container\ContainerInterface` is a package which tries
-to standardize features in container objects (service locators, dependency 
-injection containers, etc.) to achieve interoperability.
+The used [`Interop\Container\ContainerInterface`](https://github.com/container-interop/container-interop) 
+is a package which tries to standardize features in container objects 
+(service locators, dependency injection containers, etc.) to achieve 
+interoperability.
 
 With this factory the `AlbumListAction` can be instantiated by using its 
 own factory.
