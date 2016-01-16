@@ -50,11 +50,11 @@ used to render the album list template. Since we have no data to output
 yet, an empty array is passed to the renderer.
 
 Note that the `HtmlResponse` class accepts a status code and headers as 
-additional arguments. To output the status code and reponse headers generated
+additional arguments. To output the status code and response headers generated
 by middleware executed with a higher priority you need to pass them manually
 to the `HtmlResponse`.
 
-```
+```php
 return new HtmlResponse(
     $this->template->render('album::list', $data),
     $response->getStatusCode(), 
