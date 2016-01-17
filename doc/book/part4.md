@@ -357,7 +357,6 @@ return [
 
   * The first route is called `album-create` and should process the 
     `Album\Action\AlbumCreateFormAction` for GET requests. 
-
   * The second route is called `album-create-handle` and should process the 
     `Album\Action\AlbumCreateHandleAction` for POST requests. It also adds
     the `Album\Action\AlbumCreateFormAction` to the pipeline as the next
@@ -590,10 +589,8 @@ class AlbumCreateHandleAction
 
   * It needs the instance of the router to generate an URL for a route to
     redirect to. 
-
   * It needs the instance of the album repository to be able to save the
     new album.
-
   * It needs the instance of the album data form for the form handling
     and validation.
 
@@ -602,23 +599,15 @@ class AlbumCreateHandleAction
 * In the `__invoke()` method the form handling is processed.
 
   * First the post data is accessed from the request.
-  
   * Then the post data is passed to the form.
-  
   * Then the form validation is started.
-  
   * If the form validation was successful... 
-    
     * A new `AlbumEntity` is created
-    
     * The data is passed to its `exchangeArray()` method. 
-    
     * This new entity is saved with the repository.
-    
     * A `RedirectResponse` is created to redirect to the album list.
   
   * If the form validation failed...
-  
     * The next middleware is processed. From the route configuration you
       know that the `AlbumCreateFormAction` is the next middleware. This
       will show the create form now but with all the validation error 
@@ -665,19 +654,155 @@ class AlbumCreateHandleFactory
 
 ## Add form view helpers to helper plugin manager
 
-to be written...
+Before we can render the form in the template we need to solve a small 
+problem. The helper plugin manager that is used by `Zend\Expressive` does
+not provide the view helpers from `Zend\Form` by default. Therefore we 
+need to add them ourselves. This can easily be achieved by overwriting 
+the `HelperPluginManagerFactory`.
+
+Please create the path `/src/App/View/` and create the new file 
+`HelperPluginManagerFactory.php` in this new path. 
+  
+```php
+<?php
+namespace App\View;
+
+use Interop\Container\ContainerInterface;
+use Zend\Form\View\HelperConfig as FormHelperConfig;
+use Zend\ServiceManager\Config;
+use Zend\View\HelperPluginManager;
+
+/**
+ * Class HelperPluginManagerFactory
+ *
+ * @package App\View
+ */
+class HelperPluginManagerFactory
+{
+    /**
+     * @param ContainerInterface $container
+     *
+     * @return HelperPluginManager
+     */
+    public function __invoke(ContainerInterface $container)
+    {
+        $config  = $container->has('config') ? $container->get('config') : [];
+        $config  = isset($config['view_helpers'])
+            ? $config['view_helpers']
+            : [];
+
+        $manager = new HelperPluginManager(new Config($config));
+        $manager->setServiceLocator($container);
+
+        // Add zend-form view helper configuration:
+        $formConfig = new FormHelperConfig();
+        $formConfig->configureServiceManager($manager);
+
+        return $manager;
+    }
+}
+```
+
+* This factory takes the configuration from the DI container and checks 
+  for the `view_helpers` section within the configuration.
+   
+* Then it instantiates the `Zend\View\HelperPluginManager` with the
+  configuration and injects the DI container to the helper plugin 
+  manager.
+  
+* Afterwards, it instantiates the `Zend\Form\View\HelperConfig` (please
+  note the namespace alias `FormHelperConfig`) and passes it to the
+  helper plugin manager as well.
+  
+Now all the form view helpers are accessible in the templates.
 
 ## Create album creation template
 
-to be written...
+Next, you need to create the `create.phtml` file in the existing 
+`/templates/album/` path. This template should render the album data form.
 
-## Add link to the album creation page
+```php
+<?php
+use Album\Form\AlbumDataForm;
 
-to be written...
+/** @var AlbumDataForm $form */
+$form = $this->albumForm;
+$form->setAttribute('action', $this->url('album-create-handle'));
+
+$this->headTitle('Create new album');
+?>
+
+<div class="jumbotron">
+    <h1>Create new album</h1>
+</div>
+
+<div class="alert alert-danger">
+    <strong><?php echo $this->message; ?></strong>
+</div>
+
+<div class="well">
+    <?php echo $this->form()->openTag($form); ?>
+    <div class="form-group">
+        <?php echo $this->formLabel($form->get('artist')); ?>
+        <div class="col-sm-10">
+            <?php echo $this->formElement($form->get('artist')); ?>
+            <?php echo $this->formElementErrors($form->get('artist')); ?>
+        </div>
+    </div>
+    <div class="form-group">
+        <?php echo $this->formLabel($form->get('title')); ?>
+        <div class="col-sm-10">
+            <?php echo $this->formElement($form->get('title')); ?>
+            <?php echo $this->formElementErrors($form->get('title')); ?>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <?php echo $this->formElement($form->get('save_album')); ?>
+        </div>
+    </div>
+    <?php echo $this->form()->closeTag(); ?>
+</div>
+
+<p>
+    <a href="<?php echo $this->url('album') ?>" class="btn btn-success">
+        Back to album list
+    </a>
+</p>
+```
+
+* It sets the form action to the url for the `album-create-handle` route 
+  which is generated with the `url` view helper. 
+  
+* It displays the heading and the current message. 
+
+* It renders the form by using the `form`, the `formLabel`, the 
+  `formElement` and the `formElementErrors` view helpers for the two form 
+  elements and the submit button.
+  
+* At the bottom it displays a link back to the album list.
+
+## Add link to the album list page
+
+Finally, you only need to add a link button to the album list page. Please open
+the `list.phtml` file in the `/templates/album/` path. Add the link at the
+bottom of the page by using the `url` view helper with the `album-create` 
+route. 
+
+```php
+<p>
+    <a href="<?php echo $this->url('album-create') ?>" class="btn btn-success">
+        Create new album
+    </a>
+</p>
+```
 
 Now you can browse to 
 [http://localhost:8080/album/create](http://localhost:8080/album/cerate) 
-to see if the album form is shown as expected. 
+to see if the album form is shown as expected. Please try to enter a new 
+album with no data and with valid data and see what happens. If the 
+creation of a new album is successful it will be displayed in the album 
+list.
 
 ![Screenshot of album create form](images/screen-album-create-form.png)
 
