@@ -867,7 +867,98 @@ album list is shown as expected.
 
 ## Update tests for album list middleware
 
-to be written...
+Finally, you need to update the tests in the `/test/AlbumTest/Action/` 
+path. The `AlbumListActionTest` has to test the injection of the 
+`AlbumRepository` instance and the call to its `fetchAllAlbums()` method.
+
+```php
+<?php
+namespace AppTest\Action;
+
+/* ... */
+
+class AlbumListActionTest extends PHPUnit_Framework_TestCase
+{
+    /* ... */
+
+    /**
+     * Test if action renders the album list
+     */
+    public function testActionRendersAlbumList()
+    {
+        $albumRepository = $this->prophesize(
+            AlbumRepositoryInterface::class
+        );
+        $albumRepository->fetchAllAlbums()->shouldBeCalled()->willReturn(
+            ['album1', 'album2']
+        );
+
+        $renderer = $this->prophesize(TemplateRendererInterface::class);
+        $renderer->render(
+            'album::list', ['albumList' => ['album1', 'album2']]
+        )->shouldBeCalled()->willReturn('BODY');
+
+        $action = new AlbumListAction(
+            $renderer->reveal(), $albumRepository->reveal()
+        );
+
+        $response = $action(
+            $this->request->reveal(),
+            $this->response->reveal(),
+            $this->next
+        );
+
+        $this->assertInstanceOf(HtmlResponse::class, $response);
+
+        $this->assertEquals('BODY', $response->getBody());
+    }
+}
+```
+
+And the factory test case also needs to test the injection of the 
+`AlbumRepository` as well.
+
+```php
+<?php
+namespace AppTest\Action;
+
+/* ... */
+
+class AlbumListFactoryTest extends \PHPUnit_Framework_TestCase
+{
+    /* ... */
+
+    /**
+     * Test if factory returns the correct action
+     */
+    public function testFactory()
+    {
+        $factory = new AlbumListFactory();
+
+        $this->container
+            ->get(TemplateRendererInterface::class)
+            ->willReturn(
+                $this->prophesize(TemplateRendererInterface::class)
+            );
+
+        $this->container
+            ->get(AlbumRepositoryInterface::class)
+            ->willReturn(
+                $this->prophesize(AlbumRepositoryInterface::class)
+            );
+
+        $action = $factory($this->container->reveal());
+
+        $this->assertTrue($action instanceof AlbumListAction);
+    }
+}
+```
+
+To run the tests simple run this command:
+
+```
+$ phpunit
+```
 
 ## Compare with example repository branch `part3`
 
