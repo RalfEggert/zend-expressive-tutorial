@@ -50,8 +50,27 @@ Again, use composer to start the build-in web server:
 $ composer serve
 ```
 
+By default composer will terminate with a `ProcessTimedOutException` after
+300 seconds. Via the `COMPOSER_PROCESS_TIMEOUT` environment variable you
+may change that behavior.
+
+```
+$ export COMPOSER_PROCESS_TIMEOUT=86400
+$ composer serve
+or
+$ COMPOSER_PROCESS_TIMEOUT=86400 composer serve
+```
+
 This starts up a web server on localhost port 8080; browse to 
 [http://localhost:8080/](http://localhost:8080/) to see if your 
 application responds correctly!
 
 ![Screenshot after installation](images/screen-after-installation.png)
+
+## Compare with example repository branch `part1`
+
+You can easily compare your code with the example repository when looking 
+at the branch `part1`. If you want you can even clone it and have a deeper
+look.
+
+[https://github.com/RalfEggert/zend-expressive-tutorial/tree/part1](https://github.com/RalfEggert/zend-expressive-tutorial/tree/part1)
