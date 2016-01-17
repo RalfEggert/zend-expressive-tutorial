@@ -184,7 +184,7 @@ There are a couple of things to note:
 
 * The three private properties only allow the access via the implemented
   methods. To get the values for id, artist and title you need to use the
-  four getter-methods. To change the data you not to use the 
+  four getter-methods. To change the data you need to use the 
   exchange-method.
 
 * Within the `exchangeArray()` method the injected array is looped. For 
@@ -273,7 +273,7 @@ interface AlbumStorageInterface
 
 Every data storage you want to create should implement this storage 
 interface. Besides a relational database you could build a storage to use a 
-web service in the backend, store all date into the file system if needed
+web service in the backend, store all data into the file system if needed
 or use a Non-SQL database.
 
 ## Create a table gateway
@@ -284,8 +284,8 @@ allows the reading and writing access to this data. The
 sub-component implements the 
 [table-data-gateway pattern](http://martinfowler.com/eaaCatalog/tableDataGateway.html).
  
-Since a storage is not a direct part of the model-layer and can be swapped
-we will need to create the new path `/src/Album/Db/` and place the 
+Because a storage is not part of the model-layer and can be swapped
+we create a new path `/src/Album/Db/` and place the 
 `AlbumTableGateway.php` file in there. Our table gateway implements the 
 `AlbumStorageInterface` interface and extends the 
 `Zend\Db\TableGateway\TableGateway`. 
@@ -710,7 +710,7 @@ identifier and the factories for the instantiation.
 
 ## Update the album list middleware
 
-No it is time to update the album list middleware from the last part. 
+Now it is time to update the album list middleware from the last part. 
 Please open the file `/src/Album/Action/AlbumListAction.php` and implement
 the following changes.
 
