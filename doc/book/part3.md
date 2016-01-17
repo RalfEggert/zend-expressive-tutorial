@@ -99,6 +99,7 @@ now. Please create the new path `/src/Album/Model/Entity/` and place a
 <?php
 namespace Album\Model\Entity;
 
+use DomainException;
 use Zend\Stdlib\ArraySerializableInterface;
 
 /**
@@ -153,8 +154,10 @@ class AlbumEntity implements ArraySerializableInterface
     public function exchangeArray(array $array)
     {
         foreach ($array as $key => $value) {
-            if (property_exists($this, $key)) {
-                $this->$key = $value;
+            $setter = 'set' . ucfirst($key);
+
+            if (method_exists($this, $setter)) {
+                $this->{$setter}($value);
             }
         }
     }
@@ -172,6 +175,55 @@ class AlbumEntity implements ArraySerializableInterface
 
         return $data;
     }
+
+
+    /**
+     * @param $id
+     */
+    private function setId($id)
+    {
+        $id = (int)$id;
+
+        if ($id <= 0) {
+            throw new DomainException(
+                'Album id must be a positive integer!'
+            );
+        }
+
+        $this->id = $id;
+    }
+
+    /**
+     * @param $artist
+     */
+    private function setArtist($artist)
+    {
+        $artist = (string)$artist;
+
+        if (empty($artist) || strlen($artist) > 100) {
+            throw new DomainException(
+                'Album artist must be between 1 and 100 chars!'
+            );
+        }
+
+        $this->artist = $artist;
+    }
+
+    /**
+     * @param $title
+     */
+    private function setTitle($title)
+    {
+        $title = (string)$title;
+
+        if (empty($title) || strlen($title) > 100) {
+            throw new DomainException(
+                'Album title must be between 1 and 100 chars!'
+            );
+        }
+
+        $this->title = $title;
+    }
 }
 ```
 
@@ -188,12 +240,16 @@ There are a couple of things to note:
   exchange-method.
 
 * Within the `exchangeArray()` method the injected array is looped. For 
-  each key we check if the property exists. The value is only set for this
-  key if that check was successful.
+  each key we build a setter method name and check if the method exists. 
+  The value is only set for this key if that check was successful.
   
 * Within the `getArrayCopy()` method we look through all the properties of
   the current object and build a `$data` array that gets returned at the 
   end.
+
+* Each property has a private setter-method which does two things before 
+  setting the value. First the value is filtered by a type cast. Second
+  the value is validated and an exception is thrown if validation fails.
 
 ## Create a storage interface
 
