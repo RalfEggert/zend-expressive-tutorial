@@ -26,7 +26,6 @@ class AlbumInputFilter extends InputFilter
                 [
                     'name'    => 'StringLength',
                     'options' => [
-                        'encoding' => 'UTF-8',
                         'min'      => 1,
                         'max'      => 100,
                     ],
@@ -45,7 +44,6 @@ class AlbumInputFilter extends InputFilter
                 [
                     'name'    => 'StringLength',
                     'options' => [
-                        'encoding' => 'UTF-8',
                         'min'      => 1,
                         'max'      => 100,
                     ],
