@@ -11,6 +11,7 @@ need to create the new path `/src/Album/Action/` and place a new
 `AlbumListAction.php` file within this new path.
 
 ```php
+<?php
 namespace Album\Action;
 
 use Psr\Http\Message\ResponseInterface;
@@ -18,19 +19,36 @@ use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
 use Zend\Expressive\Template\TemplateRendererInterface;
 
+/**
+ * Class AlbumListAction
+ *
+ * @package Album\Action
+ */
 class AlbumListAction
 {
+    /**
+     * @var TemplateRendererInterface
+     */
     private $template;
 
+    /**
+     * @param TemplateRendererInterface|null $template
+     */
     public function __construct(
         TemplateRendererInterface $template = null
     ) {
         $this->template = $template;
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface      $response
+     * @param callable|null          $next
+     *
+     * @return HtmlResponse
+     */
     public function __invoke(
-        ServerRequestInterface $request, 
-        ResponseInterface $response,
+        ServerRequestInterface $request, ResponseInterface $response,
         callable $next = null
     ) {
         $data = [];
@@ -85,13 +103,24 @@ template renderer. Please create a `AlbumListActionFactory.php` file within
 the same path of the `AlbumListAction` class. 
 
 ```php
+<?php
 namespace Album\Action;
 
 use Interop\Container\ContainerInterface;
 use Zend\Expressive\Template\TemplateRendererInterface;
 
+/**
+ * Class AlbumListFactory
+ *
+ * @package Album\Action
+ */
 class AlbumListFactory
 {
+    /**
+     * @param ContainerInterface $container
+     *
+     * @return AlbumListAction
+     */
     public function __invoke(ContainerInterface $container)
     {
         $template = $container->get(TemplateRendererInterface::class);
@@ -144,6 +173,7 @@ Please create a new `album.global.php` file in the `/config/autoload`
 path.
 
 ```php
+<?php
 return [
     'dependencies' => [
         'factories' => [
@@ -259,3 +289,10 @@ to be written...
 
 to be written...
 
+## Compare with example repository branch `part2`
+
+You can easily compare your code with the example repository when looking 
+at the branch `part2`. If you want you can even clone it and have a deeper
+look.
+
+[https://github.com/RalfEggert/zend-expressive-tutorial/tree/part2](https://github.com/RalfEggert/zend-expressive-tutorial/tree/part2)
