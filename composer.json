@@ -24,6 +24,8 @@
         "zendframework/zend-expressive-zendrouter": "^1.0",
         "zendframework/zend-servicemanager": "^2.5",
         "zendframework/zend-db": "^2.5",
+        "zendframework/zend-form": "^2.5",
+        "zendframework/zend-inputfilter": "^2.5",
         "ocramius/proxy-manager": "^1.0",
         "zendframework/zend-expressive-zendviewrenderer": "^1.0"
     },
