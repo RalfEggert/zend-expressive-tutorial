@@ -7,15 +7,8 @@ page will show the data from the database.
 ## Setup the database and the database connection
 
 First, we need to setup the database. We will use MySQL for this tutorial,
-so please create a new database called `album-tutorial` and create a new 
-user `album` with the password `album` and grant him the privileges to 
-this database. If you are not sure, how to create a user and grant the
-privileges, please refer to the 
-[MySQL manual](http://dev.mysql.com/doc/refman/5.7/en/adding-users.html) or 
-use [phpMyAdmin](https://wiki.phpmyadmin.net/pma/user_management).
-
-Not run these SQL statements to create the album table with some test data 
-in it.
+so please create a new database called `album-tutorial`. Then run these SQL 
+statements to create the album table with some test data in it.
 
 ```sql
  CREATE TABLE album (
