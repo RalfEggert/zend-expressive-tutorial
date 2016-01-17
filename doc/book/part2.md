@@ -262,3 +262,10 @@ to be written...
 
 to be written...
 
+## Compare with example repository branch `part2`
+
+You can easily compare your code with the example repository when looking 
+at the branch `part2`. If you want you can even clone it and have a deeper
+look.
+
+[https://github.com/RalfEggert/zend-expressive-tutorial/tree/part2](https://github.com/RalfEggert/zend-expressive-tutorial/tree/part2)

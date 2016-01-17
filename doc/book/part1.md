@@ -66,3 +66,11 @@ This starts up a web server on localhost port 8080; browse to
 application responds correctly!
 
 ![Screenshot after installation](images/screen-after-installation.png)
+
+## Compare with example repository branch `part1`
+
+You can easily compare your code with the example repository when looking 
+at the branch `part1`. If you want you can even clone it and have a deeper
+look.
+
+[https://github.com/RalfEggert/zend-expressive-tutorial/tree/part1](https://github.com/RalfEggert/zend-expressive-tutorial/tree/part1)
