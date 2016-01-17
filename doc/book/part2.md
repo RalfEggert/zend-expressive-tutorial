@@ -283,11 +283,172 @@ album page was setup properly.
 
 ## Setup PHPUnit for testing album list middleware
 
-to be written...
+Setting up (PHPUnit)[https://phpunit.de/] for testing is quite simple. 
+Just copy the `phpunit.xml.dist` file in the project root to 'phpunit.xml' 
+and add the album test directory to the test suite.
+
+```xml
+<phpunit bootstrap="./vendor/autoload.php" colors="true">
+    <testsuites>
+        <testsuite name="App\\Tests">
+            <directory>./test/AppTest</directory>
+        </testsuite>
+        <testsuite name="Album\\Tests">
+            <directory>./test/AlbumTest</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">src</directory>
+        </whitelist>
+    </filter>
+</phpunit>
+```
 
 ## Setup tests for album list middleware
 
-to be written...
+You need to create the `/test/AlbumTest/Action/` path and add the file
+`AlbumListActionTest.php` to this new path. This test case should test the
+action we just created. The `AlbumListActionTest` tests if the 
+`AlbumListAction` returns an instance of 
+`Zend\Diactoros\Response\HtmlResponse` which has some rendered content. 
+
+```php
+<?php
+namespace AlbumTest\Action;
+
+use Album\Action\AlbumListAction;
+use PHPUnit_Framework_TestCase;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Zend\Diactoros\Response\HtmlResponse;
+use Zend\Expressive\Template\TemplateRendererInterface;
+
+/**
+ * Class AlbumListActionTest
+ *
+ * @package AlbumTest\Action
+ */
+class AlbumListActionTest extends PHPUnit_Framework_TestCase
+{
+    /**
+     * @var ServerRequestInterface
+     */
+    private $request;
+
+    /**
+     * @var ResponseInterface
+     */
+    private $response;
+
+    /**
+     * @var callable
+     */
+    private $next;
+
+    /**
+     * Setup test case
+     */
+    public function setUp()
+    {
+        $this->request  = $this->prophesize(ServerRequestInterface::class);
+        $this->response = $this->prophesize(ResponseInterface::class);
+
+        $this->next = function () {
+        };
+    }
+
+    /**
+     * Test if action renders the album list
+     */
+    public function testActionRendersAlbumList()
+    {
+        $renderer = $this->prophesize(TemplateRendererInterface::class);
+        $renderer->render('album::list', [])->shouldBeCalled()->willReturn(
+            'BODY'
+        );
+
+        $action = new AlbumListAction($renderer->reveal());
+
+        $response = $action(
+            $this->request->reveal(),
+            $this->response->reveal(),
+            $this->next
+        );
+
+        $this->assertInstanceOf(HtmlResponse::class, $response);
+
+        $this->assertEquals('BODY', $response->getBody());
+    }
+}
+```
+
+Create another test for the factory in the same path. The 
+`AlbumListFactoryTest` tests if the `AlbumListFactory` returns an instance
+of the `AlbumListAction`.
+
+```php
+<?php
+
+namespace AppTest\Action;
+
+use Album\Action\AlbumListAction;
+use Album\Action\AlbumListFactory;
+use Interop\Container\ContainerInterface;
+use Zend\Expressive\Router\RouterInterface;
+use Zend\Expressive\Template\TemplateRendererInterface;
+
+/**
+ * Class AlbumListFactoryTest
+ *
+ * @package AppTest\Action
+ */
+class AlbumListFactoryTest extends \PHPUnit_Framework_TestCase
+{
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    /**
+     * Setup test case
+     */
+    protected function setUp()
+    {
+        $this->container = $this->prophesize(ContainerInterface::class);
+        $router          = $this->prophesize(RouterInterface::class);
+
+        $this->container->get(RouterInterface::class)->willReturn($router);
+    }
+
+    /**
+     * Test if factory returns the correct action
+     */
+    public function testFactory()
+    {
+        $this->container
+            ->get(TemplateRendererInterface::class)
+            ->willReturn(
+                $this->prophesize(TemplateRendererInterface::class)
+            );
+
+        $factory = new AlbumListFactory();
+
+        $this->assertTrue($factory instanceof AlbumListFactory);
+
+        $action = $factory($this->container->reveal());
+
+        $this->assertTrue($action instanceof AlbumListAction);
+    }
+}
+```
+
+To run the tests simple run this command:
+
+```
+$ phpunit
+```
 
 ## Compare with example repository branch `part2`
 
