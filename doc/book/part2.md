@@ -11,6 +11,7 @@ need to create the new path `/src/Album/Action/` and place a new
 `AlbumListAction.php` file within this new path.
 
 ```php
+<?php
 namespace Album\Action;
 
 use Psr\Http\Message\ResponseInterface;
@@ -85,6 +86,7 @@ template renderer. Please create a `AlbumListActionFactory.php` file within
 the same path of the `AlbumListAction` class. 
 
 ```php
+<?php
 namespace Album\Action;
 
 use Interop\Container\ContainerInterface;
@@ -144,6 +146,7 @@ Please create a new `album.global.php` file in the `/config/autoload`
 path.
 
 ```php
+<?php
 return [
     'dependencies' => [
         'factories' => [
