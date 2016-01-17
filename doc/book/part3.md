@@ -101,27 +101,55 @@ namespace Album\Model\Entity;
 
 use Zend\Stdlib\ArraySerializableInterface;
 
+/**
+ * Class AlbumEntity
+ *
+ * @package Album\Model\Entity
+ */
 class AlbumEntity implements ArraySerializableInterface
 {
+    /**
+     * @var integer
+     */
     private $id;
+
+    /**
+     * @var string
+     */
     private $artist;
+
+    /**
+     * @var string
+     */
     private $title;
 
+    /**
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * @return string
+     */
     public function getArtist()
     {
         return $this->artist;
     }
 
+    /**
+     * @return string
+     */
     public function getTitle()
     {
         return $this->title;
     }
 
+    /**
+     * @param array $array
+     */
     public function exchangeArray(array $array)
     {
         foreach ($array as $key => $value) {
@@ -131,6 +159,9 @@ class AlbumEntity implements ArraySerializableInterface
         }
     }
 
+    /**
+     * @return array
+     */
     public function getArrayCopy()
     {
         $data = [];
@@ -188,16 +219,54 @@ namespace Album\Model\Storage;
 
 use Album\Model\Entity\AlbumEntity;
 
+/**
+ * Interface AlbumStorageInterface
+ *
+ * @package Album\Model\Storage
+ */
 interface AlbumStorageInterface
 {
+    /**
+     * Fetch album list
+     *
+     * @return AlbumEntity[]
+     */
     public function fetchAlbumList();
 
+    /**
+     * Fetch an album by id
+     *
+     * @param int $id
+     *
+     * @return AlbumEntity|null
+     */
     public function fetchAlbumById($id);
 
+    /**
+     * Insert album
+     *
+     * @param AlbumEntity $album
+     *
+     * @return boolean
+     */
     public function insertAlbum(AlbumEntity $album);
 
+    /**
+     * Update album
+     *
+     * @param AlbumEntity $album
+     *
+     * @return boolean
+     */
     public function updateAlbum(AlbumEntity $album);
 
+    /**
+     * Delete an album
+     *
+     * @param AlbumEntity $album
+     *
+     * @return boolean
+     */
     public function deleteAlbum(AlbumEntity $album);
 }
 ```
@@ -231,13 +300,29 @@ use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\ResultSetInterface;
 use Zend\Db\TableGateway\TableGateway;
 
+/**
+ * Class AlbumTableGateway
+ *
+ * @package Album\Db
+ */
 class AlbumTableGateway extends TableGateway implements AlbumStorageInterface
 {
+    /**
+     * AlbumTableGateway constructor.
+     *
+     * @param AdapterInterface   $adapter
+     * @param ResultSetInterface $resultSet
+     */
     public function __construct(AdapterInterface $adapter, ResultSetInterface $resultSet)
     {
         parent::__construct('album', $adapter, null, $resultSet);
     }
 
+    /**
+     * Fetch album list
+     *
+     * @return AlbumEntity[]
+     */
     public function fetchAlbumList()
     {
         $select = $this->getSql()->select();
@@ -252,6 +337,13 @@ class AlbumTableGateway extends TableGateway implements AlbumStorageInterface
         return $collection;
     }
 
+    /**
+     * Fetch an album by id
+     *
+     * @param int $id
+     *
+     * @return AlbumEntity|null
+     */
     public function fetchAlbumById($id)
     {
         $select = $this->getSql()->select();
@@ -260,6 +352,13 @@ class AlbumTableGateway extends TableGateway implements AlbumStorageInterface
         return $this->selectWith($select)->current();
     }
 
+    /**
+     * Insert album
+     *
+     * @param AlbumEntity $album
+     *
+     * @return boolean
+     */
     public function insertAlbum(AlbumEntity $album)
     {
         $insertData = $album->getArrayCopy();
@@ -270,6 +369,13 @@ class AlbumTableGateway extends TableGateway implements AlbumStorageInterface
         return $this->insertWith($insert) > 0;
     }
 
+    /**
+     * Update album
+     *
+     * @param AlbumEntity $album
+     *
+     * @return boolean
+     */
     public function updateAlbum(AlbumEntity $album)
     {
         $updateData = $album->getArrayCopy();
@@ -281,6 +387,13 @@ class AlbumTableGateway extends TableGateway implements AlbumStorageInterface
         return $this->updateWith($update) > 0;
     }
 
+    /**
+     * Delete an album
+     *
+     * @param AlbumEntity $album
+     *
+     * @return boolean
+     */
     public function deleteAlbum(AlbumEntity $album)
     {
         $delete = $this->getSql()->delete();
@@ -347,8 +460,18 @@ use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\HydratingResultSet;
 use Zend\Hydrator\ArraySerializable;
 
+/**
+ * Class AlbumTableGatewayFactory
+ *
+ * @package Album\Db
+ */
 class AlbumTableGatewayFactory
 {
+    /**
+     * @param ContainerInterface $container
+     *
+     * @return AlbumTableGateway
+     */
     public function __invoke(ContainerInterface $container)
     {
         $adapter = $container->get(AdapterInterface::class);
@@ -390,14 +513,45 @@ namespace Album\Model\Repository;
 
 use Album\Model\Entity\AlbumEntity;
 
+/**
+ * Interface AlbumRepositoryInterface
+ *
+ * @package Album\Model\Repository
+ */
 interface AlbumRepositoryInterface
 {
+    /**
+     * Fetch all albums
+     *
+     * @return AlbumEntity[]
+     */
     public function fetchAllAlbums();
 
+    /**
+     * Fetch a single album
+     *
+     * @param $id
+     *
+     * @return AlbumEntity|null
+     */
     public function fetchSingleAlbum($id);
 
+    /**
+     * Save album
+     *
+     * @param AlbumEntity $album
+     *
+     * @return boolean
+     */
     public function saveAlbum(AlbumEntity $album);
 
+    /**
+     * Delete an album
+     *
+     * @param AlbumEntity $album
+     *
+     * @return boolean
+     */
     public function deleteAlbum(AlbumEntity $album);
 }
 ```
@@ -413,25 +567,57 @@ namespace Album\Model\Repository;
 use Album\Model\Entity\AlbumEntity;
 use Album\Model\Storage\AlbumStorageInterface;
 
+/**
+ * Class ZendDbAlbumRepository
+ *
+ * @package Album\Model\Repository
+ */
 class AlbumRepository implements AlbumRepositoryInterface
 {
+    /**
+     * @var AlbumStorageInterface
+     */
     private $albumStorage;
 
+    /**
+     * AlbumRepository constructor.
+     *
+     * @param AlbumStorageInterface $albumStorage
+     */
     public function __construct(AlbumStorageInterface $albumStorage)
     {
         $this->albumStorage = $albumStorage;
     }
 
+    /**
+     * Fetch all albums
+     *
+     * @return AlbumEntity[]
+     */
     public function fetchAllAlbums()
     {
         return $this->albumStorage->fetchAlbumList();
     }
 
+    /**
+     * Fetch a single album
+     *
+     * @param $id
+     *
+     * @return AlbumEntity|null
+     */
     public function fetchSingleAlbum($id)
     {
         return $this->albumStorage->fetchAlbumById($id);
     }
 
+    /**
+     * Save album
+     *
+     * @param AlbumEntity $album
+     *
+     * @return boolean
+     */
     public function saveAlbum(AlbumEntity $album)
     {
         if (!$album->getId()) {
@@ -441,6 +627,13 @@ class AlbumRepository implements AlbumRepositoryInterface
         }
     }
 
+    /**
+     * Delete an album
+     *
+     * @param AlbumEntity $album
+     *
+     * @return boolean
+     */
     public function deleteAlbum(AlbumEntity $album)
     {
         return $this->albumStorage->deleteAlbum($album);
@@ -466,8 +659,18 @@ namespace Album\Model\Repository;
 use Album\Model\Storage\AlbumStorageInterface;
 use Interop\Container\ContainerInterface;
 
+/**
+ * Class ZendDbAlbumRepositoryFactory
+ *
+ * @package Album\Model\Repository
+ */
 class AlbumRepositoryFactory
 {
+    /**
+     * @param ContainerInterface $container
+     *
+     * @return AlbumRepository
+     */
     public function __invoke(ContainerInterface $container)
     {
         $albumStorage = $container->get(AlbumStorageInterface::class);
@@ -521,11 +724,29 @@ use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
 use Zend\Expressive\Template\TemplateRendererInterface;
 
+/**
+ * Class AlbumListAction
+ *
+ * @package Album\Action
+ */
 class AlbumListAction
 {
+    /**
+     * @var TemplateRendererInterface
+     */
     private $template;
+
+    /**
+     * @var AlbumRepositoryInterface
+     */
     private $albumRepository;
 
+    /**
+     * AlbumListAction constructor.
+     *
+     * @param TemplateRendererInterface $template
+     * @param AlbumRepositoryInterface  $albumRepository
+     */
     public function __construct(
         TemplateRendererInterface $template,
         AlbumRepositoryInterface $albumRepository
@@ -534,6 +755,13 @@ class AlbumListAction
         $this->albumRepository = $albumRepository;
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface      $response
+     * @param callable|null          $next
+     *
+     * @return HtmlResponse
+     */
     public function __invoke(
         ServerRequestInterface $request, ResponseInterface $response,
         callable $next = null
@@ -570,8 +798,18 @@ use Album\Model\Repository\AlbumRepositoryInterface;
 use Interop\Container\ContainerInterface;
 use Zend\Expressive\Template\TemplateRendererInterface;
 
+/**
+ * Class AlbumListFactory
+ *
+ * @package Album\Action
+ */
 class AlbumListFactory
 {
+    /**
+     * @param ContainerInterface $container
+     *
+     * @return AlbumListAction
+     */
     public function __invoke(ContainerInterface $container)
     {
         $template        = $container->get(TemplateRendererInterface::class);
