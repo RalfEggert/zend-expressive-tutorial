@@ -113,7 +113,23 @@ is a specialized service-manager just for input filter classes. We won't
 use the input filter manager in this tutorial. By implementing the `init()` 
 method it will be much easier to setup the input filter manager in your
 project at a later time.
- 
+
+Please also note that we have filtering and validation now within the
+private setter-methods of the `AlbumEntity` and the `AlbumInputFilter`. 
+This might look redundant, but there are good reasons for this. 
+
+* The `AlbumEntity` always makes sure that no invalid data is passed by 
+  throwing the exceptions. You cannot set a title with more than 100 chars.
+  
+* The `AlbumInputFilter` also makes sure that no invalid data is passed by
+  a form. While the exceptions within the `AlbumEntity` will be thrown one 
+  by one, the `AlbumInputFilter` always checks all input data and generates
+  the error messages.
+  
+* This two-level filtering and validation is a common practice. You could
+  compare it with JavaScript validation in the front end and PHP validation
+  in the backend.
+
 Of course the `AlbumInputFilter` will need a factory as will. So please 
 create another `AlbumInputFilterFactory.php` file in the same path. The 
 factory is just instantiating the `AlbumInputFilter` and running the
@@ -287,15 +303,295 @@ fill the form elements with these values.
 
 ## Update album configuration
 
-to be written...
+Next, we need to update the album configuration in the 
+`/config/autload/album.global.php` file. 
+
+```php
+<?php
+return [
+    'dependencies' => [
+        'factories' => [
+            /* ... */
+            
+            Album\Action\AlbumCreateFormAction::class   =>
+                Album\Action\AlbumCreateFormFactory::class,
+            Album\Action\AlbumCreateHandleAction::class =>
+                Album\Action\AlbumCreateHandleFactory::class,
+
+            Album\Form\AlbumDataForm::class =>
+                Album\Form\AlbumDataFormFactory::class,
+
+            Album\Model\InputFilter\AlbumInputFilter::class =>
+                Album\Model\InputFilter\AlbumInputFilterFactory::class,
+
+            /* ... */
+        ],
+    ],
+
+    'routes' => [
+        /* ... */
+        
+        [
+            'name'            => 'album-create',
+            'path'            => '/album/create',
+            'middleware'      => Album\Action\AlbumCreateFormAction::class,
+            'allowed_methods' => ['GET'],
+        ],
+        [
+            'name'            => 'album-create-handle',
+            'path'            => '/album/create/handle',
+            'middleware'      => [
+                Album\Action\AlbumCreateHandleAction::class,
+                Album\Action\AlbumCreateFormAction::class,
+            ],
+            'allowed_methods' => ['POST'],
+        ],
+    ],
+
+    /* ... */
+];
+```
+
+* We have added the DI container configuration for both the album form and
+  the album input filter in the `dependencies` section.
+  
+* In the `routes` section two new routes were added. 
+  * The first route is called `album-create` and should process the 
+    `Album\Action\AlbumCreateFormAction` for GET requests. 
+  * The second route is called `album-create-handle` and should process the 
+    `Album\Action\AlbumCreateHandleAction` for POST requests. It also adds
+    the `Album\Action\AlbumCreateFormAction` to the pipeline as the next
+    middleware.
+    
+* These two new middleware actions were also added to the `dependencies` 
+  section to inform the DI container of its existence. Both need a factory
+  to get instantiated.
 
 ## Create album form create action
 
-to be written...
+Please create the `AlbumCreateFormAction.php` file in the existing 
+`/src/Album/Action/` path. The `AlbumCreateFormAction` is used to show the 
+album form for creating new albums. It does not handle the form when send. 
+It only passes the form to the template for rendering. And it sets a 
+message depending on the current form validation state. 
+
+```php
+<?php
+namespace Album\Action;
+
+use Album\Form\AlbumDataForm;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Zend\Diactoros\Response\HtmlResponse;
+use Zend\Expressive\Template\TemplateRendererInterface;
+
+/**
+ * Class AlbumCreateFormAction
+ *
+ * @package Album\Action
+ */
+class AlbumCreateFormAction
+{
+    /**
+     * @var TemplateRendererInterface
+     */
+    private $template;
+
+    /**
+     * @var AlbumDataForm
+     */
+    private $albumForm;
+
+    /**
+     * AlbumCreateFormAction constructor.
+     *
+     * @param TemplateRendererInterface $template
+     * @param AlbumDataForm             $albumForm
+     */
+    public function __construct(
+        TemplateRendererInterface $template,
+        AlbumDataForm $albumForm
+    ) {
+        $this->template  = $template;
+        $this->albumForm = $albumForm;
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface      $response
+     * @param callable|null          $next
+     *
+     * @return HtmlResponse
+     */
+    public function __invoke(
+        ServerRequestInterface $request, ResponseInterface $response,
+        callable $next = null
+    ) {
+        if ($this->albumForm->getMessages()) {
+            $message = 'Please check your input!';
+        } else {
+            $message = 'Please enter the new album!';
+        }
+
+        $data = [
+            'albumForm' => $this->albumForm,
+            'message'   => $message,
+        ];
+
+        return new HtmlResponse(
+            $this->template->render('album::create', $data)
+        );
+    }
+}
+```
+
+* The `AlbumCreateFormAction` has two dependencies. It needs the template
+  renderer and an instance of the `AlbumDataForm` which can both be 
+  injected to the constructor during instantiation.
+   
+* Within the `__invoke()` method it first checks if the form was validated
+  with errors to set a different message. This is needed because the 
+  `AlbumCreateFormAction` middleware will also be processed after the
+  `Album\Action\AlbumCreateHandleAction` when the form validation failed 
+  (see the configuration for the route `album-create-handle` above).
+
+* After setting a message both the form and the message are passed to the
+  template renderer which renders the `album::create` template and passes
+  the generated HTML to the `HtmlResponse`.
+  
+Now the `AlbumCreateFormAction` needs a factory to inject both the 
+template renderer and the form instance. Please create the 
+`AlbumCreateFormFactory.php` file to do the job. Both dependencies are
+requested from the DI container.
+
+```php
+<?php
+namespace Album\Action;
+
+use Album\Form\AlbumDataForm;
+use Interop\Container\ContainerInterface;
+use Zend\Expressive\Template\TemplateRendererInterface;
+
+/**
+ * Class AlbumCreateFormFactory
+ *
+ * @package Album\Action
+ */
+class AlbumCreateFormFactory
+{
+    /**
+     * @param ContainerInterface $container
+     *
+     * @return AlbumCreateFormAction
+     */
+    public function __invoke(ContainerInterface $container)
+    {
+        $template  = $container->get(TemplateRendererInterface::class);
+        $albumForm = $container->get(AlbumDataForm::class);
+
+        return new AlbumCreateFormAction(
+            $template, $albumForm
+        );
+    }
+}
+```
 
 ## Create album form handling action
 
-to be written...
+Now create the `AlbumCreateHandleAction.php` file within the same path.
+This middleware action is used for the form handling of the album form. 
+It can only be accessed when a POST request is send to the path of the
+`album-create-handle` route (see the configuration for the route above).
+
+```php
+<?php
+namespace Album\Action;
+
+use Album\Form\AlbumDataForm;
+use Album\Model\Entity\AlbumEntity;
+use Album\Model\Repository\AlbumRepositoryInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Zend\Diactoros\Response\HtmlResponse;
+use Zend\Diactoros\Response\RedirectResponse;
+use Zend\Expressive\Router\RouterInterface;
+
+/**
+ * Class AlbumCreateHandleAction
+ *
+ * @package Album\Action
+ */
+class AlbumCreateHandleAction
+{
+    /**
+     * @var RouterInterface
+     */
+    private $router;
+
+    /**
+     * @var AlbumRepositoryInterface
+     */
+    private $albumRepository;
+
+    /**
+     * @var AlbumDataForm
+     */
+    private $albumForm;
+
+    /**
+     * AlbumCreateHandleAction constructor.
+     *
+     * @param RouterInterface          $router
+     * @param AlbumRepositoryInterface $albumRepository
+     * @param AlbumDataForm            $albumForm
+     */
+    public function __construct(
+        RouterInterface $router,
+        AlbumRepositoryInterface $albumRepository,
+        AlbumDataForm $albumForm
+    ) {
+        $this->router          = $router;
+        $this->albumRepository = $albumRepository;
+        $this->albumForm       = $albumForm;
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface      $response
+     * @param callable|null          $next
+     *
+     * @return HtmlResponse
+     */
+    public function __invoke(
+        ServerRequestInterface $request, ResponseInterface $response,
+        callable $next = null
+    ) {
+        $postData = $request->getParsedBody();
+
+        $this->albumForm->setData($postData);
+
+        if ($this->albumForm->isValid()) {
+            $album = new AlbumEntity();
+            $album->exchangeArray($postData);
+
+            if ($this->albumRepository->saveAlbum($album)) {
+                return new RedirectResponse(
+                    $this->router->generateUri('album')
+                );
+            }
+        }
+
+        return $next($request, $response);
+    }
+}
+```
+
+* The class has
+
+* ...
+
+* ...
+
 
 ## Add form view helpers to helper plugin manager
 
