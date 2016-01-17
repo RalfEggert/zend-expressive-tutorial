@@ -354,8 +354,10 @@ return [
   the album input filter in the `dependencies` section.
   
 * In the `routes` section two new routes were added. 
+
   * The first route is called `album-create` and should process the 
     `Album\Action\AlbumCreateFormAction` for GET requests. 
+
   * The second route is called `album-create-handle` and should process the 
     `Album\Action\AlbumCreateHandleAction` for POST requests. It also adds
     the `Album\Action\AlbumCreateFormAction` to the pipeline as the next
@@ -584,12 +586,82 @@ class AlbumCreateHandleAction
 }
 ```
 
-* The class has
+* The class `AlbumCreateHandleAction` three dependencies:
 
-* ...
+  * It needs the instance of the router to generate an URL for a route to
+    redirect to. 
 
-* ...
+  * It needs the instance of the album repository to be able to save the
+    new album.
 
+  * It needs the instance of the album data form for the form handling
+    and validation.
+
+* All dependencies can be injected via the constructor.
+
+* In the `__invoke()` method the form handling is processed.
+
+  * First the post data is accessed from the request.
+  
+  * Then the post data is passed to the form.
+  
+  * Then the form validation is started.
+  
+  * If the form validation was successful... 
+    
+    * A new `AlbumEntity` is created
+    
+    * The data is passed to its `exchangeArray()` method. 
+    
+    * This new entity is saved with the repository.
+    
+    * A `RedirectResponse` is created to redirect to the album list.
+  
+  * If the form validation failed...
+  
+    * The next middleware is processed. From the route configuration you
+      know that the `AlbumCreateFormAction` is the next middleware. This
+      will show the create form now but with all the validation error 
+      messages.
+
+Of course, the `AlbumCreateHandleAction` also needs a factory. Please 
+place it within the same path. The factory requests the three dependencies
+from the DI container and passes them to the constructor of the class.
+
+```php
+<?php
+namespace Album\Action;
+
+use Album\Form\AlbumDataForm;
+use Album\Model\Repository\AlbumRepositoryInterface;
+use Interop\Container\ContainerInterface;
+use Zend\Expressive\Router\RouterInterface;
+use Zend\Expressive\Template\TemplateRendererInterface;
+
+/**
+ * Class AlbumCreateHandleFactory
+ *
+ * @package Album\Action
+ */
+class AlbumCreateHandleFactory
+{
+    /**
+     * @param ContainerInterface $container
+     *
+     * @return AlbumCreateHandleAction
+     */
+    public function __invoke(ContainerInterface $container)
+    {
+        $router          = $container->get(RouterInterface::class);
+        $albumRepository = $container->get(AlbumRepositoryInterface::class);
+        $albumForm       = $container->get(AlbumDataForm::class);
+
+        return new AlbumCreateHandleAction(
+            $router, $albumRepository, $albumForm
+        );
+    }
+}
+```
 
 ## Add form view helpers to helper plugin manager
 
