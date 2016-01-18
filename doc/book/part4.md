@@ -787,7 +787,7 @@ route.
 ```
 
 Now you can browse to 
-[http://localhost:8080/album/create](http://localhost:8080/album/cerate) 
+[http://localhost:8080/album/create](http://localhost:8080/album/create) 
 to see if the album form is shown as expected. Please try to enter a new 
 album with no data and with valid data and see what happens. If the 
 creation of a new album is successful it will be displayed in the album 
