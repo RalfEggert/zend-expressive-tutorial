@@ -29,29 +29,13 @@ statements to create the album table with some test data in it.
      VALUES  ('Gotye',  'Making  Mirrors');
 ```
 
-Next, you need to update the `composer.json` to require the 
+Next, you need to update the run Composer to to require the 
 [`Zend\Db`](https://github.com/zendframework/zend-db) component of the 
-Zend Framework.
+Zend Framework. This component will be added to the `composer.json` and
+installed afterwards.
  
 ```
-{
-    // ... 
-
-    "require": {
-        // ...
-         
-        "zendframework/zend-expressive-zendviewrenderer": "^1.0",
-        "zendframework/zend-db": "^2.5"
-    },
-
-    // ... 
-}
-```
-
-Now you need to do a composer update to install the `Zend\Db`:
-
-```
-$ composer update
+$ composer require zendframework/zend-db
 ```
 
 To configure the database access please create the new file 
