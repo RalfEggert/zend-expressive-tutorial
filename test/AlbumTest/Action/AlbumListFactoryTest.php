@@ -4,7 +4,6 @@ namespace AppTest\Action;
 use Album\Action\AlbumListAction;
 use Album\Action\AlbumListFactory;
 use Album\Model\Repository\AlbumRepositoryInterface;
-use Album\Model\Repository\ZendDbAlbumRepository;
 use Interop\Container\ContainerInterface;
 use Zend\Expressive\Router\RouterInterface;
 use Zend\Expressive\Template\TemplateRendererInterface;
@@ -22,7 +21,7 @@ class AlbumListFactoryTest extends \PHPUnit_Framework_TestCase
     protected $container;
 
     /**
-     *
+     * Setup test case
      */
     protected function setUp()
     {
@@ -33,19 +32,23 @@ class AlbumListFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     *
+     * Test if factory returns the correct action
      */
     public function testFactory()
     {
+        $factory = new AlbumListFactory();
+
         $this->container
             ->get(TemplateRendererInterface::class)
-            ->willReturn($this->prophesize(TemplateRendererInterface::class));
+            ->willReturn(
+                $this->prophesize(TemplateRendererInterface::class)
+            );
 
         $this->container
             ->get(AlbumRepositoryInterface::class)
-            ->willReturn($this->prophesize(ZendDbAlbumRepository::class));
-
-        $factory = new AlbumListFactory();
+            ->willReturn(
+                $this->prophesize(AlbumRepositoryInterface::class)
+            );
 
         $action = $factory($this->container->reveal());
 
