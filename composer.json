@@ -41,11 +41,6 @@
             "Album\\": "src/Album/"
         }
     },
-    "autoload-dev": {
-        "psr-4": {
-            "AppTest\\": "test/AppTest/"
-        }
-    },
     "scripts": {
         "check": [
             "@cs",
