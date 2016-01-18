@@ -8,31 +8,18 @@ handling.
 ## Add more Zend Framework components
 
 To make sure that the needed Zend Framework components are installed, you 
-need to update the `composer.json` to require the 
+need to run the Composer to require the 
 [`Zend\Form`](https://github.com/zendframework/zend-form) and the 
 [`Zend\InputFilter`](https://github.com/zendframework/zend-inputfilter) 
 components of the Zend Framework.
  
 ```
-{
-    // ... 
-
-    "require": {
-        // ...
-         
-        "zendframework/zend-db": "^2.5",
-        "zendframework/zend-form": "^2.5",
-        "zendframework/zend-inputfilter": "^2.5"    },
-
-    // ... 
-}
+$ composer require zendframework/zend-inputfilter
+$ composer require zendframework/zend-form
 ```
 
-Now you need to do a composer update to install the `Zend\Db`:
-
-```
-$ composer update
-```
+Please note: since `Zend\Form` currently requires `Zend\InputFilter` we
+do not really need to add both. `Zend\Form` would be enough. 
 
 ## Create the album input filter
 
@@ -297,7 +284,9 @@ class AlbumDataFormFactory extends Form
 Please note that the injection of the `Zend\Hydrator\ArraySerializable` is
 done for a special reason. We can now bind an `AlbumEntity` instance to 
 the form and the hydrator helps to extract the data from the entity and 
-fill the form elements with these values. 
+fill the form elements with these values. We could also pass array data to 
+the form and get the `AlbumEntity` populated with this data after a 
+successful form validation.
 
 ## Update album configuration
 
@@ -585,7 +574,7 @@ class AlbumCreateHandleAction
 }
 ```
 
-* The class `AlbumCreateHandleAction` three dependencies:
+* The class `AlbumCreateHandleAction` has three dependencies:
 
   * It needs the instance of the router to generate an URL for a route to
     redirect to. 
