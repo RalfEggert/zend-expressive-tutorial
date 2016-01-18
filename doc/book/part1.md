@@ -36,7 +36,7 @@ The output on your screen should look like this:
 
 When the installer is finished, you should run a Composer update to remove
 all packages which were installed during the project creation and are not
-needed anymore. 
+needed anymore. Enter the project directory and run:
 
 ```
 $ composer update
@@ -44,7 +44,7 @@ $ composer update
 
 To watch the new project in your browser you can easily use PHPs 
 [build-in web server](http://php.net/manual/en/features.commandline.webserver.php).
-Again, use composer to start the build-in web server:
+Again, use composer to start it:
 
 ```
 $ composer serve
