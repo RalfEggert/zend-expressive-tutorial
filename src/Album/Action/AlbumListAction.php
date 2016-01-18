@@ -19,10 +19,10 @@ class AlbumListAction
     private $template;
 
     /**
-     * @param TemplateRendererInterface|null $template
+     * @param TemplateRendererInterface $template
      */
     public function __construct(
-        TemplateRendererInterface $template = null
+        TemplateRendererInterface $template
     ) {
         $this->template = $template;
     }
