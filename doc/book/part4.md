@@ -284,7 +284,9 @@ class AlbumDataFormFactory extends Form
 Please note that the injection of the `Zend\Hydrator\ArraySerializable` is
 done for a special reason. We can now bind an `AlbumEntity` instance to 
 the form and the hydrator helps to extract the data from the entity and 
-fill the form elements with these values. 
+fill the form elements with these values. We could also pass array data to 
+the form and get the `AlbumEntity` populated with this data after a 
+successful form validation.
 
 ## Update album configuration
 
