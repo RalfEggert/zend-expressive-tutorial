@@ -614,7 +614,6 @@ use Album\Form\AlbumDataForm;
 use Album\Model\Repository\AlbumRepositoryInterface;
 use Interop\Container\ContainerInterface;
 use Zend\Expressive\Router\RouterInterface;
-use Zend\Expressive\Template\TemplateRendererInterface;
 
 /**
  * Class AlbumCreateHandleFactory
@@ -702,6 +701,22 @@ class HelperPluginManagerFactory
 * Afterwards, it instantiates the `Zend\Form\View\HelperConfig` (please
   note the namespace alias `FormHelperConfig`) and passes it to the
   helper plugin manager as well.
+
+Enable custom factory in `config/autoload/templates/global.autoload.php` file. 
+Replace following definition:
+
+```php
+            Zend\View\HelperPluginManager::class =>
+                Zend\Expressive\ZendView\HelperPluginManagerFactory::class,
+```
+
+with:
+
+```php
+
+            Zend\View\HelperPluginManager::class =>
+                App\View\HelperPluginManagerFactory::class,
+```
   
 Now all the form view helpers are accessible in the templates.
 
