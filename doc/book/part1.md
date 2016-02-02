@@ -27,10 +27,11 @@ to choose packages to install. These include the following:
 - `Minimal skeleton? (no default middleware, templates or assets; configuration
   only)`: For the tutorial, please choose `n` (the default selection) for a full
   skeleton. 
-- `Which router do you want to use?`: please choose `3`, for the Zend Router.
+- `Which router do you want to use?`: please choose `2` (the default selection),
+  for FastRoute.
 - `Which container do you want to use for dependency injection?`: please choose
   `3` (the default selection), for zend-servicemanager.
-- `Which template engine do you want to use?`: please choose `3`, for Zend View.
+- `Which template engine do you want to use?`: please choose `1`, for Plates.
 - `Which error handler do you want to use during development?`: Please choose
   `1` (the default selection), for Whoops.
 
