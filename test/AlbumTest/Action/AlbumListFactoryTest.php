@@ -1,19 +1,14 @@
 <?php
-namespace AppTest\Action;
+namespace AlbumTest\Action;
 
 use Album\Action\AlbumListAction;
 use Album\Action\AlbumListFactory;
 use Album\Model\Repository\AlbumRepositoryInterface;
 use Interop\Container\ContainerInterface;
-use Zend\Expressive\Router\RouterInterface;
+use PHPUnit_Framework_TestCase as TestCase;
 use Zend\Expressive\Template\TemplateRendererInterface;
 
-/**
- * Class AlbumListFactoryTest
- *
- * @package AppTest\Action
- */
-class AlbumListFactoryTest extends \PHPUnit_Framework_TestCase
+class AlbumListFactoryTest extends TestCase
 {
     /**
      * @var ContainerInterface
@@ -25,23 +20,19 @@ class AlbumListFactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $router = $this->prophesize(RouterInterface::class);
-
         $this->container = $this->prophesize(ContainerInterface::class);
-        $this->container->get(RouterInterface::class)->willReturn($router);
     }
 
     /**
      * Test if factory returns the correct action
      */
-    public function testFactory()
+    public function testFactoryReturnsAlbumListAction()
     {
-        $factory = new AlbumListFactory();
-
         $this->container
             ->get(TemplateRendererInterface::class)
             ->willReturn(
                 $this->prophesize(TemplateRendererInterface::class)
+                    ->reveal()
             );
 
         $this->container
@@ -50,8 +41,10 @@ class AlbumListFactoryTest extends \PHPUnit_Framework_TestCase
                 $this->prophesize(AlbumRepositoryInterface::class)
             );
 
-        $action = $factory($this->container->reveal());
+        $factory = new AlbumListFactory();
+        $this->assertTrue($factory instanceof AlbumListFactory);
 
+        $action = $factory($this->container->reveal());
         $this->assertTrue($action instanceof AlbumListAction);
     }
 }

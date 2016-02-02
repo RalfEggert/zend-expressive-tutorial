@@ -3,18 +3,13 @@ namespace AlbumTest\Action;
 
 use Album\Action\AlbumListAction;
 use Album\Model\Repository\AlbumRepositoryInterface;
-use PHPUnit_Framework_TestCase;
+use PHPUnit_Framework_TestCase as TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
 use Zend\Expressive\Template\TemplateRendererInterface;
 
-/**
- * Class AlbumListActionTest
- *
- * @package AlbumTest\Action
- */
-class AlbumListActionTest extends PHPUnit_Framework_TestCase
+class AlbumListActionTest extends TestCase
 {
     /**
      * @var ServerRequestInterface
@@ -36,7 +31,7 @@ class AlbumListActionTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->request = $this->prophesize(ServerRequestInterface::class);
+        $this->request  = $this->prophesize(ServerRequestInterface::class);
         $this->response = $this->prophesize(ResponseInterface::class);
 
         $this->next = function () {
@@ -46,7 +41,7 @@ class AlbumListActionTest extends PHPUnit_Framework_TestCase
     /**
      * Test if action renders the album list
      */
-    public function testActionRendersAlbumList()
+    public function testActionRendersAlbumListTemplate()
     {
         $albumRepository = $this->prophesize(
             AlbumRepositoryInterface::class
@@ -71,7 +66,6 @@ class AlbumListActionTest extends PHPUnit_Framework_TestCase
         );
 
         $this->assertInstanceOf(HtmlResponse::class, $response);
-
         $this->assertEquals('BODY', $response->getBody());
     }
 }

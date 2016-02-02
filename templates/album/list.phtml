@@ -26,14 +26,14 @@ $this->headTitle('Albums');
         $deleteUrl = $this->url('album-delete', $urlParams);
         ?>
         <tr>
-            <td><?php echo $albumEntity->getId(); ?></td>
-            <td><?php echo $albumEntity->getArtist(); ?></td>
-            <td><?php echo $albumEntity->getTitle(); ?></td>
+            <td><?= $albumEntity->getId(); ?></td>
+            <td><?= $albumEntity->getArtist(); ?></td>
+            <td><?= $albumEntity->getTitle(); ?></td>
             <td>
-                <a href="<?php echo $updateUrl; ?>" class="btn btn-success">
+                <a href="<?= $updateUrl; ?>" class="btn btn-success">
                     <i class="fa fa-pencil"></i>
                 </a>
-                <a href="<?php echo $deleteUrl; ?>" class="btn btn-success">
+                <a href="<?= $deleteUrl; ?>" class="btn btn-success">
                     <i class="fa fa-trash"></i>
                 </a>
             </td>
@@ -43,7 +43,7 @@ $this->headTitle('Albums');
 </table>
 
 <p>
-    <a href="<?php echo $this->url('album-create') ?>" class="btn btn-success">
+    <a href="<?=  $this->url('album-create') ?>" class="btn btn-success">
         Create new album
     </a>
 </p>
