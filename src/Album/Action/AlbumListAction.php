@@ -7,11 +7,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
 use Zend\Expressive\Template\TemplateRendererInterface;
 
-/**
- * Class AlbumListAction
- *
- * @package Album\Action
- */
 class AlbumListAction
 {
     /**
@@ -25,8 +20,6 @@ class AlbumListAction
     private $albumRepository;
 
     /**
-     * AlbumListAction constructor.
-     *
      * @param TemplateRendererInterface $template
      * @param AlbumRepositoryInterface  $albumRepository
      */
@@ -42,11 +35,11 @@ class AlbumListAction
      * @param ServerRequestInterface $request
      * @param ResponseInterface      $response
      * @param callable|null          $next
-     *
      * @return HtmlResponse
      */
     public function __invoke(
-        ServerRequestInterface $request, ResponseInterface $response,
+        ServerRequestInterface $request,
+        ResponseInterface $response,
         callable $next = null
     ) {
         $data = [
