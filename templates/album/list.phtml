@@ -20,9 +20,9 @@ $this->headTitle('Albums');
     <?php /** @var AlbumEntity $albumEntity */ ?>
     <?php foreach ($this->albumList as $albumEntity) : ?>
         <tr>
-            <td><?php echo $albumEntity->getId(); ?></td>
-            <td><?php echo $albumEntity->getArtist(); ?></td>
-            <td><?php echo $albumEntity->getTitle(); ?></td>
+            <td><?= $albumEntity->getId(); ?></td>
+            <td><?= $albumEntity->getArtist(); ?></td>
+            <td><?= $albumEntity->getTitle(); ?></td>
         </tr>
     <?php endforeach; ?>
     </tbody>
