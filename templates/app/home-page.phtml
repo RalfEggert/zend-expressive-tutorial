@@ -1,4 +1,4 @@
-<?php $this->headTitle('Home'); ?>
+<?php $this->layout('layout::default', ['title' => 'Home']) ?>
 
 <div class="jumbotron">
     <h1>Welcome to <span class="zf-green">zend-expressive</span></h1>
@@ -77,10 +77,10 @@
             One fundamental feature of zend-expressive is that it provides mechanisms for implementing dynamic
             routing, a feature required in most modern web applications. Expressive ships with multiple adapters.
         </p>
-        <?php if (isset($this->routerName)) : ?>
+        <?php if (isset($routerName)) : ?>
             <p>
-                <a href="<?= $this->routerDocs ?>" target="_blank">
-                    Get started with <?= $this->routerName ?>.
+                <a href="<?=$this->e($routerDocs)?>" target="_blank">
+                    Get started with <?=$this->e($routerName)?>.
                 </a>
             </p>
         <?php endif; ?>
@@ -88,7 +88,7 @@
 
     <div class="col-md-4">
         <h2>
-            <a href="https://zendframework.github.io/zend-expressive/features/template/zend-view/" target="_blank">
+            <a href="https://zendframework.github.io/zend-expressive/features/template/plates/" target="_blank">
                 <i class="fa fa-files-o"></i> Templating
             </a>
         </h2>
@@ -98,10 +98,10 @@
             However, Expressive does provide abstraction for templating, which allows you to write middleware that
             is engine-agnostic.
         </p>
-        <?php if (isset($this->templateName)) : ?>
+        <?php if (isset($templateName)) : ?>
             <p>
-                <a href="<?= $this->templateDocs ?>" target="_blank">
-                    Get started with <?= $this->templateName ?>.
+                <a href="<?=$this->e($templateDocs)?>" target="_blank">
+                    Get started with <?=$this->e($templateName)?>.
                 </a>
             </p>
         <?php endif; ?>
