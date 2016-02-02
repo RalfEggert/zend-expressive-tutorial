@@ -2,8 +2,7 @@
 return [
     'dependencies' => [
         'factories' => [
-            Album\Action\AlbumListAction::class =>
-                Album\Action\AlbumListFactory::class,
+            Album\Action\AlbumListAction::class => Album\Action\AlbumListFactory::class,
         ],
     ],
 
@@ -18,7 +17,7 @@ return [
 
     'templates' => [
         'paths' => [
-            'album'    => ['templates/album'],
+            'album' => ['templates/album'],
         ],
     ],
 ];
