@@ -211,7 +211,7 @@ Now, place a new `list.phtml` file within that path, with the following
 contents:
 
 ```php
-<?php $this->headTitle('Albums'); ?>
+<?php $this->layout('layout::default', ['title' => 'Albums']) ?>
 
 <div class="jumbotron">
     <h1>Album list</h1>
@@ -220,7 +220,7 @@ contents:
 
 This template sets the title of the page, and prints the heading within a
 div that is styled by [Bootstrap](http://getbootstrap.com/). Please note, 
-that there is no echo needed for the `$this->headTitle()` call since the
+that there is no echo needed for the `$this->layout()` call since the
 output of the page title is done within the layout file 
 (`templates/layout/default.phtml`).
 
