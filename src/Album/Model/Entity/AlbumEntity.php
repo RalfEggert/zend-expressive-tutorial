@@ -4,15 +4,10 @@ namespace Album\Model\Entity;
 use DomainException;
 use Zend\Stdlib\ArraySerializableInterface;
 
-/**
- * Class AlbumEntity
- *
- * @package Album\Model\Entity
- */
 class AlbumEntity implements ArraySerializableInterface
 {
     /**
-     * @var integer
+     * @var int
      */
     private $id;
 
@@ -80,11 +75,11 @@ class AlbumEntity implements ArraySerializableInterface
 
 
     /**
-     * @param $id
+     * @param int $id
      */
     private function setId($id)
     {
-        $id = (int)$id;
+        $id = (int) $id;
 
         if ($id <= 0) {
             throw new DomainException(
@@ -96,11 +91,11 @@ class AlbumEntity implements ArraySerializableInterface
     }
 
     /**
-     * @param $artist
+     * @param string $artist
      */
     private function setArtist($artist)
     {
-        $artist = (string)$artist;
+        $artist = (string) $artist;
 
         if (empty($artist) || strlen($artist) > 100) {
             throw new DomainException(
@@ -112,11 +107,11 @@ class AlbumEntity implements ArraySerializableInterface
     }
 
     /**
-     * @param $title
+     * @param string $title
      */
     private function setTitle($title)
     {
-        $title = (string)$title;
+        $title = (string) $title;
 
         if (empty($title) || strlen($title) > 100) {
             throw new DomainException(

@@ -184,7 +184,7 @@ class AlbumEntity implements ArraySerializableInterface
 
 
     /**
-     * @param $id
+     * @param int $id
      */
     private function setId($id)
     {
@@ -200,7 +200,7 @@ class AlbumEntity implements ArraySerializableInterface
     }
 
     /**
-     * @param $artist
+     * @param string $artist
      */
     private function setArtist($artist)
     {
@@ -216,7 +216,7 @@ class AlbumEntity implements ArraySerializableInterface
     }
 
     /**
-     * @param $title
+     * @param string $title
      */
     private function setTitle($title)
     {
@@ -373,7 +373,7 @@ class AlbumTableGateway extends TableGateway implements AlbumStorageInterface
     {
         $select = $this->getSql()->select();
 
-        $collection = array();
+        $collection = [];
 
         /** @var AlbumEntity $entity */
         foreach ($this->selectWith($select) as $entity) {
@@ -498,14 +498,15 @@ class AlbumTableGatewayFactory
      */
     public function __invoke(ContainerInterface $container)
     {
-        $adapter = $container->get(AdapterInterface::class);
-
         $resultSetPrototype = new HydratingResultSet(
             new ArraySerializable(),
             new AlbumEntity()
         );
 
-        return new AlbumTableGateway($adapter, $resultSetPrototype);
+        return new AlbumTableGateway(
+            $container->get(AdapterInterface::class),
+            $resultSetPrototype
+        );
     }
 }
 ```
@@ -557,7 +558,7 @@ interface AlbumRepositoryInterface
     /**
      * Fetch a single album by identifier.
      *
-     * @param $id
+     * @param int $id
      * @return AlbumEntity|null
      */
     public function fetchSingleAlbum($id);
@@ -574,7 +575,7 @@ interface AlbumRepositoryInterface
     public function saveAlbum(AlbumEntity $album);
 
     /**
-     * Delete an album
+     * Delete an album.
      *
      * @param AlbumEntity $album
      * @return bool
@@ -680,7 +681,6 @@ class AlbumRepositoryFactory
 {
     /**
      * @param ContainerInterface $container
-     *
      * @return AlbumRepository
      */
     public function __invoke(ContainerInterface $container)
@@ -752,8 +752,6 @@ class AlbumListAction
     private $albumRepository;
 
     /**
-     * AlbumListAction constructor.
-     *
      * @param TemplateRendererInterface $template
      * @param AlbumRepositoryInterface  $albumRepository
      */
@@ -769,7 +767,6 @@ class AlbumListAction
      * @param ServerRequestInterface $request
      * @param ResponseInterface      $response
      * @param callable|null          $next
-     *
      * @return HtmlResponse
      */
     public function __invoke(
@@ -908,7 +905,8 @@ class AlbumListActionTest extends PHPUnit_Framework_TestCase
 
         $renderer = $this->prophesize(TemplateRendererInterface::class);
         $renderer->render(
-            'album::list', ['albumList' => ['album1', 'album2']]
+            'album::list',
+            ['albumList' => ['album1', 'album2']]
         )->shouldBeCalled()->willReturn('BODY');
 
         $action = new AlbumListAction(

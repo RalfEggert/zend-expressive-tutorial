@@ -7,11 +7,6 @@ use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\ResultSetInterface;
 use Zend\Db\TableGateway\TableGateway;
 
-/**
- * Class AlbumTableGateway
- *
- * @package Album\Db
- */
 class AlbumTableGateway extends TableGateway implements AlbumStorageInterface
 {
     /**
@@ -26,15 +21,13 @@ class AlbumTableGateway extends TableGateway implements AlbumStorageInterface
     }
 
     /**
-     * Fetch album list
-     *
-     * @return AlbumEntity[]
+     * {@inheritDoc}
      */
     public function fetchAlbumList()
     {
         $select = $this->getSql()->select();
 
-        $collection = array();
+        $collection = [];
 
         /** @var AlbumEntity $entity */
         foreach ($this->selectWith($select) as $entity) {
@@ -45,11 +38,7 @@ class AlbumTableGateway extends TableGateway implements AlbumStorageInterface
     }
 
     /**
-     * Fetch an album by id
-     *
-     * @param int $id
-     *
-     * @return AlbumEntity|null
+     * {@inheritDoc}
      */
     public function fetchAlbumById($id)
     {
@@ -60,11 +49,7 @@ class AlbumTableGateway extends TableGateway implements AlbumStorageInterface
     }
 
     /**
-     * Insert album
-     *
-     * @param AlbumEntity $album
-     *
-     * @return boolean
+     * {@inheritDoc}
      */
     public function insertAlbum(AlbumEntity $album)
     {
@@ -77,11 +62,7 @@ class AlbumTableGateway extends TableGateway implements AlbumStorageInterface
     }
 
     /**
-     * Update album
-     *
-     * @param AlbumEntity $album
-     *
-     * @return boolean
+     * {@inheritDoc}
      */
     public function updateAlbum(AlbumEntity $album)
     {
@@ -95,11 +76,7 @@ class AlbumTableGateway extends TableGateway implements AlbumStorageInterface
     }
 
     /**
-     * Delete an album
-     *
-     * @param AlbumEntity $album
-     *
-     * @return boolean
+     * {@inheritDoc}
      */
     public function deleteAlbum(AlbumEntity $album)
     {
