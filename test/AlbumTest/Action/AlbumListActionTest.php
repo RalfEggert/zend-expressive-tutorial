@@ -46,17 +46,20 @@ class AlbumListActionTest extends TestCase
         $albumRepository = $this->prophesize(
             AlbumRepositoryInterface::class
         );
-        $albumRepository->fetchAllAlbums()->shouldBeCalled()->willReturn(
-            ['album1', 'album2']
-        );
+        $albumRepository->fetchAllAlbums()->shouldBeCalled()->willReturn([
+            'album1',
+            'album2',
+        ]);
 
         $renderer = $this->prophesize(TemplateRendererInterface::class);
         $renderer->render(
-            'album::list', ['albumList' => ['album1', 'album2']]
+            'album::list',
+            ['albumList' => ['album1', 'album2']]
         )->shouldBeCalled()->willReturn('BODY');
 
         $action = new AlbumListAction(
-            $renderer->reveal(), $albumRepository->reveal()
+            $renderer->reveal(),
+            $albumRepository->reveal()
         );
 
         $response = $action(

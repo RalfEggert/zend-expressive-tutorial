@@ -3,11 +3,6 @@ namespace Album\Model\Storage;
 
 use Album\Model\Entity\AlbumEntity;
 
-/**
- * Interface AlbumStorageInterface
- *
- * @package Album\Model\Storage
- */
 interface AlbumStorageInterface
 {
     /**
@@ -21,7 +16,6 @@ interface AlbumStorageInterface
      * Fetch an album by id
      *
      * @param int $id
-     *
      * @return AlbumEntity|null
      */
     public function fetchAlbumById($id);
@@ -30,8 +24,7 @@ interface AlbumStorageInterface
      * Insert album
      *
      * @param AlbumEntity $album
-     *
-     * @return boolean
+     * @return bool
      */
     public function insertAlbum(AlbumEntity $album);
 
@@ -39,8 +32,7 @@ interface AlbumStorageInterface
      * Update album
      *
      * @param AlbumEntity $album
-     *
-     * @return boolean
+     * @return bool
      */
     public function updateAlbum(AlbumEntity $album);
 
@@ -48,8 +40,7 @@ interface AlbumStorageInterface
      * Delete an album
      *
      * @param AlbumEntity $album
-     *
-     * @return boolean
+     * @return bool
      */
     public function deleteAlbum(AlbumEntity $album);
 }

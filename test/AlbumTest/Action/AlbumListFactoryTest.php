@@ -31,14 +31,13 @@ class AlbumListFactoryTest extends TestCase
         $this->container
             ->get(TemplateRendererInterface::class)
             ->willReturn(
-                $this->prophesize(TemplateRendererInterface::class)
-                    ->reveal()
+                $this->prophesize(TemplateRendererInterface::class)->reveal()
             );
 
         $this->container
             ->get(AlbumRepositoryInterface::class)
             ->willReturn(
-                $this->prophesize(AlbumRepositoryInterface::class)
+                $this->prophesize(AlbumRepositoryInterface::class)->reveal()
             );
 
         $factory = new AlbumListFactory();
