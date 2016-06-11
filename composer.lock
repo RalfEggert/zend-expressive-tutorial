@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "489d00c59bc2beaa2781b11b1770ccfc",
-    "content-hash": "c9df03a52d5af895ab9f4bf3258606ed",
+    "hash": "2f7995d0d8d6a82f2fd205d96022430e",
+    "content-hash": "bc35c4ffbe340e8a595f1ae37ab549d2",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -33,6 +33,52 @@
             ],
             "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
             "time": "2014-12-30 15:22:37"
+        },
+        {
+            "name": "mtymek/expressive-config-manager",
+            "version": "0.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mtymek/expressive-config-manager.git",
+                "reference": "bde7d5eee81b2cc2fde71e03dbda9a5006b344a5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mtymek/expressive-config-manager/zipball/bde7d5eee81b2cc2fde71e03dbda9a5006b344a5",
+                "reference": "bde7d5eee81b2cc2fde71e03dbda9a5006b344a5",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.5 || ^7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.7",
+                "squizlabs/php_codesniffer": "^2.3",
+                "zendframework/zend-config": "^2.5",
+                "zendframework/zend-servicemanager": "^2.6"
+            },
+            "suggest": {
+                "zendframework/zend-config": "Allows loading configuration from XML, INI, YAML and JSON files",
+                "zendframework/zend-stdlib": "Allows removing configuration keys and globbing on Windows platform"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Zend\\Expressive\\ConfigManager\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD 3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Mateusz Tymek",
+                    "email": "mtymek@gmail.com"
+                }
+            ],
+            "description": "Lightweight library for merging and caching application config",
+            "time": "2016-03-17 16:35:07"
         },
         {
             "name": "ocramius/proxy-manager",

@@ -27,7 +27,8 @@
         "ocramius/proxy-manager": "^1.0 || ^2.0",
         "zendframework/zend-expressive-zendviewrenderer": "^1.0",
         "zendframework/zend-component-installer": "^0.2.0",
-        "zendframework/zend-db": "^2.5",
+        "mtymek/expressive-config-manager": "^0.4.0",
+        "zendframework/zend-db": "^2.8",
         "zendframework/zend-hydrator": "^2.2"
     },
     "require-dev": {
