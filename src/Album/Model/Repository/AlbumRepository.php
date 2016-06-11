@@ -4,11 +4,6 @@ namespace Album\Model\Repository;
 use Album\Model\Entity\AlbumEntity;
 use Album\Model\Storage\AlbumStorageInterface;
 
-/**
- * Class ZendDbAlbumRepository
- *
- * @package Album\Model\Repository
- */
 class AlbumRepository implements AlbumRepositoryInterface
 {
     /**
@@ -27,9 +22,7 @@ class AlbumRepository implements AlbumRepositoryInterface
     }
 
     /**
-     * Fetch all albums
-     *
-     * @return AlbumEntity[]
+     * {@inheritDoc}
      */
     public function fetchAllAlbums()
     {
@@ -37,11 +30,7 @@ class AlbumRepository implements AlbumRepositoryInterface
     }
 
     /**
-     * Fetch a single album
-     *
-     * @param $id
-     *
-     * @return AlbumEntity|null
+     * {@inheritDoc}
      */
     public function fetchSingleAlbum($id)
     {
@@ -49,27 +38,19 @@ class AlbumRepository implements AlbumRepositoryInterface
     }
 
     /**
-     * Save album
-     *
-     * @param AlbumEntity $album
-     *
-     * @return boolean
+     * {@inheritDoc}
      */
     public function saveAlbum(AlbumEntity $album)
     {
-        if (!$album->getId()) {
+        if (! $album->getId()) {
             return $this->albumStorage->insertAlbum($album);
-        } else {
-            return $this->albumStorage->updateAlbum($album);
         }
+
+        return $this->albumStorage->updateAlbum($album);
     }
 
     /**
-     * Delete an album
-     *
-     * @param AlbumEntity $album
-     *
-     * @return boolean
+     * {@inheritDoc}
      */
     public function deleteAlbum(AlbumEntity $album)
     {
