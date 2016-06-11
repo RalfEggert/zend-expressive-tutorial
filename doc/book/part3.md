@@ -1,44 +1,43 @@
 # Part 3: Model and database
 
-In this part of the tutorial we will setup a database and implement the 
-model layer for our application. At the end of this part the album list 
+In this part of the tutorial, we will setup a database and implement the 
+model layer for our application. At the end of this chapter, the album list 
 page will show the data from the database.
 
 ## Setup the database and the database connection
 
-First, we need to setup the database. We will use MySQL for this tutorial,
-so please create a new database called `album-tutorial`. Then run these SQL 
-statements to create the album table with some test data in it.
+First, we need to setup the database. We will use MySQL for this tutorial.
+
+Create a new database called `album-tutorial`, and then run the following SQL 
+statements to create the `album` table, along with some test data.
 
 ```sql
- CREATE TABLE album (
-   id int(11) NOT NULL auto_increment,
-   artist varchar(100) NOT NULL,
-   title varchar(100) NOT NULL,
-   PRIMARY KEY (id)
- );
- INSERT INTO album (artist, title)
-     VALUES  ('The  Military  Wives',  'In  My  Dreams');
- INSERT INTO album (artist, title)
-     VALUES  ('Adele',  '21');
- INSERT INTO album (artist, title)
-     VALUES  ('Bruce  Springsteen',  'Wrecking Ball (Deluxe)');
- INSERT INTO album (artist, title)
-     VALUES  ('Lana  Del  Rey',  'Born  To  Die');
- INSERT INTO album (artist, title)
-     VALUES  ('Gotye',  'Making  Mirrors');
+CREATE TABLE album (
+    id int(11) NOT NULL auto_increment,
+    artist varchar(100) NOT NULL,
+    title varchar(100) NOT NULL,
+    PRIMARY KEY (id)
+);
+INSERT INTO album (artist, title)
+    VALUES  ('The  Military  Wives',  'In  My  Dreams');
+INSERT INTO album (artist, title)
+    VALUES  ('Adele',  '21');
+INSERT INTO album (artist, title)
+    VALUES  ('Bruce  Springsteen',  'Wrecking Ball (Deluxe)');
+INSERT INTO album (artist, title)
+    VALUES  ('Lana  Del  Rey',  'Born  To  Die');
+INSERT INTO album (artist, title)
+    VALUES  ('Gotye',  'Making  Mirrors');
 ```
 
-Next, you need to update the run Composer to to require the 
-[`Zend\Db`](https://github.com/zendframework/zend-db) component of the 
-Zend Framework. This component will be added to the `composer.json` and
-installed afterwards.
+Next, we'll add the [zend-db](https://github.com/zendframework/zend-db)
+component to the application, using composer:
  
 ```
 $ composer require zendframework/zend-db
 ```
 
-To configure the database access please create the new file 
+To configure database access, create the file
 `/config/autoload/database.global.php` with the following contents:
 
 ```php
@@ -60,24 +59,52 @@ return [
 ];
 ```
 
-* The `dependencies` configuration section configures the service-manager
-  for a new factory. The factory `Zend\Db\Adapter\AdapterServiceFactory` 
-  instantiates a new database adapter by using the configuration of the 
-  `db` section. The instantiated database adapter will be accessible
-  via the name of the `Zend\Db\Adapter\AdapterInterface`.
+- The `dependencies` configuration section configures the application service
+  container to add a factory for returning a database adapter.  The factory
+  `Zend\Db\Adapter\AdapterServiceFactory` instantiates a new database adapter by
+  using the configuration provided under the `db` key. The instantiated database
+  adapter will be accessible via the name `Zend\Db\Adapter\AdapterInterface`.
   
-* The `db` configuration section defines the database connection. We will
-  use the PDO driver with a MySQL database and the database table and user
+- The `db` configuration section defines the database connection. We will
+  use the PDO driver with a MySQL database, and the database table and user
   we created above. 
 
-Now the database is setup and we also have setup the database connection
-as well.
+> ### Store credentials in `*.local.php` files
+>
+> The above example stores the database credentials in a "global" configuration
+> file. **DO NOT DO THIS.**
+>
+> In your global configuration files, put in empty credentials. Then, in a file
+> named `database.local.php`, add the same structure, and provide the
+> credentials:
+> 
+> ```php
+> <?php
+> return [
+>     'db' => [
+>         'driver'  => 'pdo',
+>         'dsn'     => 'mysql:dbname=album-tutorial;host=localhost;charset=utf8',
+>         'user'    => 'album',
+>         'pass'    => 'album',
+>     ],
+> ];
+> ```
+>
+> "local" configuration files are merged *after* global configuration files,
+> which means they will have precedence. Additionally, they are omitted from
+> version control by default (via a `.gitignore` rule in the project root),
+> ensuring they will not be checked in to your repository. This also allows you
+> to have separate credentials and configuration per location where you deploy,
+> whether that's development, staging, QA, or production.
+
+At this point, we have setup the database, and provided a database adapter to
+our application.
 
 ## Create an album entity
 
-To represent the data of the albums we will create a simple entity class
-now. Please create the new path `/src/Album/Model/Entity/` and place a 
-`AlbumEntity.php` file in there. 
+To represent the data of the albums, we will create an entity class. Create
+the directory `src/Album/Model/Entity/`; under it, create an `AlbumEntity.php`
+file with the following contents:
 
 ```php
 <?php
@@ -86,15 +113,10 @@ namespace Album\Model\Entity;
 use DomainException;
 use Zend\Stdlib\ArraySerializableInterface;
 
-/**
- * Class AlbumEntity
- *
- * @package Album\Model\Entity
- */
 class AlbumEntity implements ArraySerializableInterface
 {
     /**
-     * @var integer
+     * @var int
      */
     private $id;
 
@@ -162,11 +184,11 @@ class AlbumEntity implements ArraySerializableInterface
 
 
     /**
-     * @param $id
+     * @param int $id
      */
     private function setId($id)
     {
-        $id = (int)$id;
+        $id = (int) $id;
 
         if ($id <= 0) {
             throw new DomainException(
@@ -178,11 +200,11 @@ class AlbumEntity implements ArraySerializableInterface
     }
 
     /**
-     * @param $artist
+     * @param string $artist
      */
     private function setArtist($artist)
     {
-        $artist = (string)$artist;
+        $artist = (string) $artist;
 
         if (empty($artist) || strlen($artist) > 100) {
             throw new DomainException(
@@ -194,11 +216,11 @@ class AlbumEntity implements ArraySerializableInterface
     }
 
     /**
-     * @param $title
+     * @param string $title
      */
     private function setTitle($title)
     {
-        $title = (string)$title;
+        $title = (string) $title;
 
         if (empty($title) || strlen($title) > 100) {
             throw new DomainException(
@@ -211,47 +233,48 @@ class AlbumEntity implements ArraySerializableInterface
 }
 ```
 
-There are a couple of things to note:
+There are a few things to note:
 
-* The `AlbumEntity` implements the `Zend\Stdlib\ArraySerializableInterface` 
-  to provide the methods `exchangeArray()` and `getArrayCopy()` for an easy
-  exchange with an array. This will make it easy to bind the entity to a 
-  form and to handle the exchange of the data coming from the database.
+- `AlbumEntity` implements `Zend\Stdlib\ArraySerializableInterface`,
+  which provides the methods `exchangeArray()` and `getArrayCopy()`, allowing
+  array de/serialization. This allows us to bind the entity to a form, as well
+  as to handle the exchange of the data coming from the database.
 
-* The three private properties only allow the access via the implemented
-  methods. To get the values for id, artist and title you need to use the
-  four getter-methods. To change the data you need to use the 
-  exchange-method.
+- The three private properties only allow access via the implemented
+  methods. To get the values for `id`, `artist`, and `title`, you need to use the
+  four getter methods. To change the data, you need to use the 
+  `exchangeArray()` method.
 
-* Within the `exchangeArray()` method the injected array is looped. For 
-  each key we build a setter method name and check if the method exists. 
+- Within the `exchangeArray()` method, the injected array is looped. For 
+  each key, we build a setter method name and check if the method exists. 
   The value is only set for this key if that check was successful.
   
-* Within the `getArrayCopy()` method we look through all the properties of
+- Within the `getArrayCopy()` method, we look through all the properties of
   the current object and build a `$data` array that gets returned at the 
   end.
 
-* Each property has a private setter-method which does two things before 
-  setting the value. First the value is filtered by a type cast. Second
-  the value is validated and an exception is thrown if validation fails.
+- Each property has a private setter method which casts and validates the value,
+  raising an exception for invalid data.
 
 ## Create a storage interface
 
-To access the data from the database table we will use the 
-`Zend\Db\TableGateway` sub-component. But before we will do that, we need 
-another small step.
+To access the data from the database table, we will use the
+`Zend\Db\TableGateway` subcomponent. But before we do that, we have a little
+preparation to do first.
 
-If we use the `Zend\Db\TableGateway` directly we will bind our model layer
-to much to the concrete implementation of the table-gateway. If the 
-repository (which we will create in a few steps) will use the table-gateway
-we will need to change our repository every time, when the implementation
-details of the table-gateway change. To reduce that we will create a 
-storage interface which will be used within the repository later on.
+If we use `Zend\Db\TableGateway` directly, we're binding our model to a specific
+data access layer, and more generally to relational databases. This means that
+if any changes happen to the `Zend\Db\TableGateway` implementation, we will need
+to change our code; if we decide to move to a NoSQL database later, we will need
+to change our code.
+
+To prevent the need for such changes, we will create a storage interface
+modeling our low layer data access needs.
  
-Please create the new `/src/Album/Model/Storage/` path and place the 
-`AlbumStorageInterface.php` file in there. The interface defines methods
-for reading a list of albums and a single album and for inserting, 
-updating and deleting albums. 
+Create the path `src/Album/Model/Storage/` and then create the file
+`AlbumStorageInterface.php` beneath it. This interface defines methods for
+reading a list of albums, reading a single album, inserting an album, updating
+an album, and deleting albums. 
 
 ```php
 <?php
@@ -259,75 +282,67 @@ namespace Album\Model\Storage;
 
 use Album\Model\Entity\AlbumEntity;
 
-/**
- * Interface AlbumStorageInterface
- *
- * @package Album\Model\Storage
- */
 interface AlbumStorageInterface
 {
     /**
-     * Fetch album list
+     * Fetch a list of albums.
      *
      * @return AlbumEntity[]
      */
     public function fetchAlbumList();
 
     /**
-     * Fetch an album by id
+     * Fetch an album by identifer.
      *
      * @param int $id
-     *
      * @return AlbumEntity|null
      */
     public function fetchAlbumById($id);
 
     /**
-     * Insert album
+     * Insert an album into storage.
      *
      * @param AlbumEntity $album
-     *
-     * @return boolean
+     * @return bool
      */
     public function insertAlbum(AlbumEntity $album);
 
     /**
-     * Update album
+     * Update an album.
      *
      * @param AlbumEntity $album
-     *
-     * @return boolean
+     * @return bool
      */
     public function updateAlbum(AlbumEntity $album);
 
     /**
-     * Delete an album
+     * Delete an album.
      *
      * @param AlbumEntity $album
-     *
-     * @return boolean
+     * @return bool
      */
     public function deleteAlbum(AlbumEntity $album);
 }
 ```
 
-Every data storage you want to create should implement this storage 
-interface. Besides a relational database you could build a storage to use a 
-web service in the backend, store all data into the file system if needed
-or use a Non-SQL database.
+Any time you want to use a different data storage &mdash; e.g., a NoSQL
+database, a web service, etc. &mdash; you can create a new class implementing
+this interface. You would then only need to swap which storage implementation
+you use.
 
 ## Create a table gateway
 
-A table gateway represents the data of a single table in your database. It
-allows the reading and writing access to this data. The 
-[`Zend\Db\TableGateway`](http://framework.zend.com/manual/current/en/modules/zend.db.table-gateway.html) 
-sub-component implements the 
-[table-data-gateway pattern](http://martinfowler.com/eaaCatalog/tableDataGateway.html).
+A [table data gateway](http://martinfowler.com/eaaCatalog/tableDataGateway.html)
+represents the data of a single table in your database, and allows reading and
+writing access to this data.
+[`Zend\Db\TableGateway`](http://framework.zend.com/manual/current/en/modules/zend.db.table-gateway.html)
+implements this pattern.
  
-Because a storage is not part of the model-layer and can be swapped
-we create a new path `/src/Album/Db/` and place the 
-`AlbumTableGateway.php` file in there. Our table gateway implements the 
-`AlbumStorageInterface` interface and extends the 
+Because storage is not part of the domain model and implementation can be
+swapped (because we defined a storage interface!), we'll place our table gateway
+in a separate path. Create the directory `src/Album/Db/`, and place the
+`AlbumTableGateway.php` file in it. Our table gateway will implement the
+`AlbumStorageInterface` interface defined in the previous section, and extend
 `Zend\Db\TableGateway\TableGateway`. 
 
 ```php
@@ -340,16 +355,9 @@ use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\ResultSetInterface;
 use Zend\Db\TableGateway\TableGateway;
 
-/**
- * Class AlbumTableGateway
- *
- * @package Album\Db
- */
 class AlbumTableGateway extends TableGateway implements AlbumStorageInterface
 {
     /**
-     * AlbumTableGateway constructor.
-     *
      * @param AdapterInterface   $adapter
      * @param ResultSetInterface $resultSet
      */
@@ -359,15 +367,13 @@ class AlbumTableGateway extends TableGateway implements AlbumStorageInterface
     }
 
     /**
-     * Fetch album list
-     *
-     * @return AlbumEntity[]
+     * {@inheritDoc}
      */
     public function fetchAlbumList()
     {
         $select = $this->getSql()->select();
 
-        $collection = array();
+        $collection = [];
 
         /** @var AlbumEntity $entity */
         foreach ($this->selectWith($select) as $entity) {
@@ -378,11 +384,7 @@ class AlbumTableGateway extends TableGateway implements AlbumStorageInterface
     }
 
     /**
-     * Fetch an album by id
-     *
-     * @param int $id
-     *
-     * @return AlbumEntity|null
+     * {@inheritDoc}
      */
     public function fetchAlbumById($id)
     {
@@ -393,11 +395,7 @@ class AlbumTableGateway extends TableGateway implements AlbumStorageInterface
     }
 
     /**
-     * Insert album
-     *
-     * @param AlbumEntity $album
-     *
-     * @return boolean
+     * {@inheritDoc}
      */
     public function insertAlbum(AlbumEntity $album)
     {
@@ -410,11 +408,7 @@ class AlbumTableGateway extends TableGateway implements AlbumStorageInterface
     }
 
     /**
-     * Update album
-     *
-     * @param AlbumEntity $album
-     *
-     * @return boolean
+     * {@inheritDoc}
      */
     public function updateAlbum(AlbumEntity $album)
     {
@@ -428,11 +422,7 @@ class AlbumTableGateway extends TableGateway implements AlbumStorageInterface
     }
 
     /**
-     * Delete an album
-     *
-     * @param AlbumEntity $album
-     *
-     * @return boolean
+     * {@inheritDoc}
      */
     public function deleteAlbum(AlbumEntity $album)
     {
@@ -444,51 +434,51 @@ class AlbumTableGateway extends TableGateway implements AlbumStorageInterface
 }
 ```
 
-Please note a couple of things here:
+Notes:
 
-* The constructor has a param for the database adapter and a pre-configured
-  result set prototype. This prototype is used for all the selects from the
-  database to represent the data. Within the constructor the name of the
-  database table is set and the adapter and the prototype are passed to the
-  parent constructor.
+- The constructor defines parameters for the database adapter and a
+  pre-configured result set prototype. This prototype is used for all the
+  selects from the database to represent the data. Within the constructor, the
+  name of the database table is set and the adapter and the prototype are passed
+  to the parent constructor.
   
-* Within the fetchAlbumList() method a `Select`-object is created based on
+- Within the `fetchAlbumList()` method, a `Select` object is created based on
   `Zend\Db\Sql`. The data of all albums is fetched from the database and 
   placed in an array collection with the id of the album as the key.
 
-* Within the fetchAlbumById() method a `Select`-object is created as well. 
+- Within the `fetchAlbumById()` method, a `Select` object is created as well. 
   The selection is limited to the album with the id that was passed to this
   method. This method just returns the fetched album. 
 
-* Within the insertAlbum() method a `Insert`-object is created which is 
-  also based on `Zend\Db\Sql`. The data of the album is extracted and 
-  passed to the `Insert`-object. Then the insertion is executed. If a new
-  row was created the method returns `true`, otherwise it returns `false`.
+- Within the `insertAlbum()` method, an `Insert` object based on `Zend\Db\Sql`
+  is created.  The data of the album is extracted and passed to the `Insert`
+  instance, and the insertion is executed. If a new row was created, the method
+  returns `true`, otherwise it returns `false`.
 
-* Within the updateAlbum() method a `Update`-object is created which is
-  also based on `Zend\Db\Sql`. The data of the album is extracted and 
-  passed to the `Update`-object. The updating is limited to the album which 
-  was passed to this method. Then the update is executed. If the row was 
-  updated the method returns `true`, otherwise it returns `false`.
+- Within the `updateAlbum()` method, an `Update` object based on `Zend\Db\Sql`
+  is created. The data of the album is extracted and passed to the `Update`
+  instance. Updates are limited to the album passed to the method. When the
+  update is executed, method returns `true` if an update occurred, and otherwise
+  returns `false`.
 
-* Within the deleteAlbum() method a `Delete`-object is created which is
-  also based on `Zend\Db\Sql`. The deletion is limited to the album which 
-  was passed to this method. Then the deletion is executed. If the row was 
-  deleted the method returns `true`, otherwise it returns `false`.
+- Within the `deleteAlbum()` method, a `Delete` object based on `Zend\Db\Sql` is
+  created. Deletion is limited to the album passed to the method. When the
+  deletion is executed, the method will return `true` if any rows were deleted,
+  and otherwise returns `false`.
 
-Please note that all of these methods either return an `AlbumEntity` or an 
-array collection of `AlbumEntity` instances or accept an 
-`AlbumEntity` instance as the only parameter. There is no need of passing 
-arrays to the data writing methods or need to handle arrays that are 
-passed from to data reading methods.
+Please note that all of these methods either return an `AlbumEntity` or an array
+collection of `AlbumEntity` instances, and, if any parameters are accepted, they
+typically only accept an `AlbumEntity` instance (with the exception of
+`fetchAlbumById()`). There is no need to pass arrays to the command methods or
+to handle arrays returned passed from the query methods.
 
-To get our `AlbumTableGateway` configured properly we will also need a 
-factory in the same path. The `AlbumTableGatewayFactory` simply requests
-the instance of the database adapter via the DI container 
-(the `Zend\ServiceManager` in our case). Then it creates the result set
-prototype containing the `Zend\Hydrator\ArraySerializable` and an 
-`AlbumEntity` instance. Both the adapter and the prototype are injected 
-into the constructor of the `AlbumTableGateway`.
+To get our `AlbumTableGateway` configured properly, we will also need a factory
+in the same path. The `AlbumTableGatewayFactory` requests the instance of the
+database adapter via the service container (zend-servicemanager in our case),
+and then creates a [hydrating](http://zendframework.github.io/zend-hydrator/quick-start/#usage)
+result set prototype using `Zend\Hydrator\ArraySerializable` and an
+`AlbumEntity` instance. Both the adapter and the prototype are injected into the
+constructor of the `AlbumTableGateway`.
 
 ```php
 <?php
@@ -500,52 +490,55 @@ use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\HydratingResultSet;
 use Zend\Hydrator\ArraySerializable;
 
-/**
- * Class AlbumTableGatewayFactory
- *
- * @package Album\Db
- */
 class AlbumTableGatewayFactory
 {
     /**
      * @param ContainerInterface $container
-     *
      * @return AlbumTableGateway
      */
     public function __invoke(ContainerInterface $container)
     {
-        $adapter = $container->get(AdapterInterface::class);
-
         $resultSetPrototype = new HydratingResultSet(
-            new ArraySerializable(), new AlbumEntity()
+            new ArraySerializable(),
+            new AlbumEntity()
         );
 
-        return new AlbumTableGateway($adapter, $resultSetPrototype);
+        return new AlbumTableGateway(
+            $container->get(AdapterInterface::class),
+            $resultSetPrototype
+        );
     }
 }
 ```
 
-Please note that [`Zend\Hydrator`](https://github.com/zendframework/zend-hydrator) 
-is used to ease the data exchange between the `AlbumEntity` instance and 
-the array data that is read from the database. The concrete 
-`ArraySerializable` hydrator uses the methods `exchangeArray()` and 
-`getArrayCopy()` which are defined in the  
-`Zend\Stdlib\ArraySerializableInterface` and implemented in the 
-`AlbumEntity` .
+Please note that [zend-hydrator](https://github.com/zendframework/zend-hydrator)
+is used to provide de/serialization between `AlbumEntity` instances and the
+array data read from the database. The concrete `ArraySerializable` hydrator
+uses the methods `exchangeArray()` and `getArrayCopy()` defined in
+`Zend\Stdlib\ArraySerializableInterface` and implemented in the `AlbumEntity` .
 
 ## Create an album repository
 
-Next, we will create a repository for the album. The repository will be 
-used within our middleware actions and hide the database implementation via
-the `AlbumStorageInterface`. This will make it much easier if you need to 
-switch from a database to a web service or use a different implementation 
-than the table-gateway.
+When creating our domain model, we need something to mediate between the domain
+objects &mdash; our entities &mdash; and the storage layer. This is generally
+achieved by a [repository](http://martinfowler.com/eaaCatalog/repository.html).
 
-Our repository will be build upon an interface we will look at first. 
-Please create the new path `/src/Album/Model/Repository/` and place a 
-`AlbumRepositoryInterface.php` file in there. This interface has only 
-four methods to fetch a list of albums or a single album and to save or
-delete an album entity.
+A repository accepts and returns domain objects, and decides whether or not
+storage operations are necessary. Often, they will cache results in order to
+reduce overhead on subsequent requests to the same methods, though this is not a
+strict requirement.
+
+We'll now create a repository for the album. The repository will be used within
+our middleware actions, and consume an `AlbumStorageInterface` implementation as
+developed in the previous section. This will allow us to switch from a database
+to a web service, or to use a different implementation than the table gateway,
+without needing to change any application code.
+
+As with storage, we'll start by creating an interface.
+Create the directory `src/Album/Model/Repository/` and place the file
+`AlbumRepositoryInterface.php` it. This interface is similar to the
+`AlbumStorageInterface`, but combines insert and update operations into a single
+"save" method.
 
 ```php
 <?php
@@ -553,52 +546,57 @@ namespace Album\Model\Repository;
 
 use Album\Model\Entity\AlbumEntity;
 
-/**
- * Interface AlbumRepositoryInterface
- *
- * @package Album\Model\Repository
- */
 interface AlbumRepositoryInterface
 {
     /**
-     * Fetch all albums
+     * Fetch all albums.
      *
      * @return AlbumEntity[]
      */
     public function fetchAllAlbums();
 
     /**
-     * Fetch a single album
+     * Fetch a single album by identifier.
      *
-     * @param $id
-     *
+     * @param int $id
      * @return AlbumEntity|null
      */
     public function fetchSingleAlbum($id);
 
     /**
-     * Save album
+     * Save an album.
+     *
+     * Should insert a new album if no identifier is present in the entity, and
+     * update an existing album otherwise.
      *
      * @param AlbumEntity $album
-     *
-     * @return boolean
+     * @return bool
      */
     public function saveAlbum(AlbumEntity $album);
 
     /**
-     * Delete an album
+     * Delete an album.
      *
      * @param AlbumEntity $album
-     *
-     * @return boolean
+     * @return bool
      */
     public function deleteAlbum(AlbumEntity $album);
 }
 ```
 
-In the same path we will need the `AlbumRepository.php` file now. The class
-implements the `AlbumRepositoryInterface` and has one private property for
-a storage which can be injected in the constructor.
+This may seem like duplication of effort, as many methods are duplicated between
+this and the `AlbumStorageInterface`. However, the separation provides a number
+of benefits:
+
+- Separation of concerns. We can add entity validation, caching, etc. as part of
+  the repository, keeping them separate from storage.
+- If our middleware consumes only the repository, we can mock the repository
+  during testing to validate behavior.
+
+Let's create a reference implementation of the interface as well.  In the same
+path, create the file `AlbumRepository.php`. The class it defines will implement
+the `AlbumRepositoryInterface`, and compose an `AlbumStorageInterface`
+instance, provided to the constructor.
  
 ```php
 <?php
@@ -607,11 +605,6 @@ namespace Album\Model\Repository;
 use Album\Model\Entity\AlbumEntity;
 use Album\Model\Storage\AlbumStorageInterface;
 
-/**
- * Class ZendDbAlbumRepository
- *
- * @package Album\Model\Repository
- */
 class AlbumRepository implements AlbumRepositoryInterface
 {
     /**
@@ -630,9 +623,7 @@ class AlbumRepository implements AlbumRepositoryInterface
     }
 
     /**
-     * Fetch all albums
-     *
-     * @return AlbumEntity[]
+     * {@inheritDoc}
      */
     public function fetchAllAlbums()
     {
@@ -640,11 +631,8 @@ class AlbumRepository implements AlbumRepositoryInterface
     }
 
     /**
+     * {@inheritDoc}
      * Fetch a single album
-     *
-     * @param $id
-     *
-     * @return AlbumEntity|null
      */
     public function fetchSingleAlbum($id)
     {
@@ -652,27 +640,19 @@ class AlbumRepository implements AlbumRepositoryInterface
     }
 
     /**
-     * Save album
-     *
-     * @param AlbumEntity $album
-     *
-     * @return boolean
+     * {@inheritDoc}
      */
     public function saveAlbum(AlbumEntity $album)
     {
-        if (!$album->getId()) {
+        if (! $album->getId()) {
             return $this->albumStorage->insertAlbum($album);
-        } else {
-            return $this->albumStorage->updateAlbum($album);
         }
+
+        return $this->albumStorage->updateAlbum($album);
     }
 
     /**
-     * Delete an album
-     *
-     * @param AlbumEntity $album
-     *
-     * @return boolean
+     * {@inheritDoc}
      */
     public function deleteAlbum(AlbumEntity $album)
     {
@@ -681,16 +661,14 @@ class AlbumRepository implements AlbumRepositoryInterface
 }
 ```
 
-The implemented methods of the repository just need to pass their 
-parameters to the appropriate methods of the storage. Only the 
-`saveAlbum()` method needs to check the id first to decide if the album 
-needs to be inserted or updated.
+Most methods of this class proxy directly to the appropriate methods of the
+storage; only the `saveAlbum()` method does any extra work (to determine whether
+an insert or update operation is warranted).
 
-Now the `AlbumRepository` also needs a factory for proper instantiation. 
-The `AlbumRepositoryFactory.php` file should be placed within the same 
-file path. In this factory we request the album storage from the DI 
-container namely our `Zend\ServiceManager` and pass it to the 
-constructor of the repository. That is it.
+The `AlbumRepository` needs a factory.  Create the file
+`AlbumRepositoryFactory.php` within the same directory; in this factory, we'll
+request the album storage from the service container, and pass it to the
+constructor of the repository.
 
 ```php
 <?php
@@ -699,32 +677,27 @@ namespace Album\Model\Repository;
 use Album\Model\Storage\AlbumStorageInterface;
 use Interop\Container\ContainerInterface;
 
-/**
- * Class ZendDbAlbumRepositoryFactory
- *
- * @package Album\Model\Repository
- */
 class AlbumRepositoryFactory
 {
     /**
      * @param ContainerInterface $container
-     *
      * @return AlbumRepository
      */
     public function __invoke(ContainerInterface $container)
     {
-        $albumStorage = $container->get(AlbumStorageInterface::class);
-
-        return new AlbumRepository($albumStorage);
+        return new AlbumRepository(
+            $container->get(AlbumStorageInterface::class)
+        );
     }
 }
 ```
 
 ## Update the album configuration
 
-Next, we need to update the album configuration. Please open the file 
-`/config/autoload/album.global.php` and add the following configuration to
-the `dependencies` section.
+Now that we have storage and our repository sorted, we need to add dependency
+configuration to the applicaition.  Edit the file
+`config/autoload/album.global.php` and add the following configuration to the
+`dependencies` section.
 
 ```php
 <?php
@@ -750,9 +723,11 @@ identifier and the factories for the instantiation.
 
 ## Update the album list middleware
 
-Now it is time to update the album list middleware from the last part. 
-Please open the file `/src/Album/Action/AlbumListAction.php` and implement
-the following changes.
+Now that we have our domain models, repository, and storage created, we can
+update our middleware to use them.
+
+Edit the file `src/Album/Action/AlbumListAction.php` and implement the following
+changes:
 
 ```php
 <?php
@@ -764,11 +739,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response\HtmlResponse;
 use Zend\Expressive\Template\TemplateRendererInterface;
 
-/**
- * Class AlbumListAction
- *
- * @package Album\Action
- */
 class AlbumListAction
 {
     /**
@@ -782,8 +752,6 @@ class AlbumListAction
     private $albumRepository;
 
     /**
-     * AlbumListAction constructor.
-     *
      * @param TemplateRendererInterface $template
      * @param AlbumRepositoryInterface  $albumRepository
      */
@@ -799,11 +767,11 @@ class AlbumListAction
      * @param ServerRequestInterface $request
      * @param ResponseInterface      $response
      * @param callable|null          $next
-     *
      * @return HtmlResponse
      */
     public function __invoke(
-        ServerRequestInterface $request, ResponseInterface $response,
+        ServerRequestInterface $request,
+        ResponseInterface $response,
         callable $next = null
     ) {
         $data = [
@@ -817,18 +785,20 @@ class AlbumListAction
 }
 ```
 
-* Add another private property `$albumRepository` for the instance of the
-  `AlbumRepository`. 
+The changes in the above include:
+
+- Adding another private property, `$albumRepository`, to hold an
+  `AlbumRepositoryInterface` instance.
   
-* Change the constructor to add a second parameter `$albumRepository` for 
-  the instance of the `AlbumRepository` and pass it to the new property.
+- Changing the constructor to add a second parameter, `$albumRepository`,
+  accepting an `AlbumRepositoryInterface` instance and assigning it to the
+  `$albumRepository` property.
 
-* Fill the `$data` array within the `invoke()` method with the list of
-  albums fetched by the repository.
+- Filling the `$data` array within the `invoke()` method with a list of
+  albums fetched from the repository.
 
-We also need to update the `AlbumListFactory` factory in the same path. 
-Besides the template renderer now the album repository is also read from
-the DI container and passed to the constructor.
+Because we've added a new constructor argument, we will need to
+update the `AlbumListFactory`:
 
 ```php
 <?php
@@ -838,11 +808,6 @@ use Album\Model\Repository\AlbumRepositoryInterface;
 use Interop\Container\ContainerInterface;
 use Zend\Expressive\Template\TemplateRendererInterface;
 
-/**
- * Class AlbumListFactory
- *
- * @package Album\Action
- */
 class AlbumListFactory
 {
     /**
@@ -852,20 +817,22 @@ class AlbumListFactory
      */
     public function __invoke(ContainerInterface $container)
     {
-        $template        = $container->get(TemplateRendererInterface::class);
-        $albumRepository = $container->get(AlbumRepositoryInterface::class);
-
-        return new AlbumListAction($template, $albumRepository);
+        return new AlbumListAction(
+            $container->get(TemplateRendererInterface::class),
+            $container->get(AlbumRepositoryInterface::class)
+        );
     }
 }
 ```
 
 ## Update the album list template
 
-Finally, you can update the album list template now to output the list of
-albums. The list is presented within a table styled by Bootstrap. We loop
-through all the albums and echo the id, artist and title by accessing the
-getter-methods of the `AlbumEntity`. 
+Finally, now that our middleware is passing albums to the template, we need to
+update the template to display them.
+
+The list is presented within a table styled by
+[Bootstrap](http://getbootstrap.com). We loop through all albums and echo the
+id, artist, and title by accessing the getter methods of the `AlbumEntity`. 
 
 ```php
 <?php
@@ -907,9 +874,11 @@ album list is shown as expected.
 
 ## Update tests for album list middleware
 
-Finally, you need to update the tests in the `/test/AlbumTest/Action/` 
-path. The `AlbumListActionTest` has to test the injection of the 
-`AlbumRepository` instance and the call to its `fetchAllAlbums()` method.
+Let's test that everything works as expected.
+
+Edit `test/AlbumTest/Action/AlbumListActionTest` to add the injection of
+the `AlbumRepositoryInterface` instance, and to mock its call to
+`fetchAllAlbums()`.
 
 ```php
 <?php
@@ -929,17 +898,20 @@ class AlbumListActionTest extends PHPUnit_Framework_TestCase
         $albumRepository = $this->prophesize(
             AlbumRepositoryInterface::class
         );
-        $albumRepository->fetchAllAlbums()->shouldBeCalled()->willReturn(
-            ['album1', 'album2']
-        );
+        $albumRepository->fetchAllAlbums()->shouldBeCalled()->willReturn([
+            'album1',
+            'album2'
+        ]);
 
         $renderer = $this->prophesize(TemplateRendererInterface::class);
         $renderer->render(
-            'album::list', ['albumList' => ['album1', 'album2']]
+            'album::list',
+            ['albumList' => ['album1', 'album2']]
         )->shouldBeCalled()->willReturn('BODY');
 
         $action = new AlbumListAction(
-            $renderer->reveal(), $albumRepository->reveal()
+            $renderer->reveal(),
+            $albumRepository->reveal()
         );
 
         $response = $action(
@@ -955,8 +927,7 @@ class AlbumListActionTest extends PHPUnit_Framework_TestCase
 }
 ```
 
-And the factory test case also needs to test the injection of the 
-`AlbumRepository` as well.
+The factory test case also needs to test the injection of the `AlbumRepository`:
 
 ```php
 <?php
@@ -978,13 +949,13 @@ class AlbumListFactoryTest extends \PHPUnit_Framework_TestCase
         $this->container
             ->get(TemplateRendererInterface::class)
             ->willReturn(
-                $this->prophesize(TemplateRendererInterface::class)
+                $this->prophesize(TemplateRendererInterface::class)->reveal()
             );
 
         $this->container
             ->get(AlbumRepositoryInterface::class)
             ->willReturn(
-                $this->prophesize(AlbumRepositoryInterface::class)
+                $this->prophesize(AlbumRepositoryInterface::class)->reveal()
             );
 
         $action = $factory($this->container->reveal());
@@ -994,9 +965,9 @@ class AlbumListFactoryTest extends \PHPUnit_Framework_TestCase
 }
 ```
 
-To run the tests simple run this command:
+Now run the tests from your project root:
 
-```
+```bash
 $ phpunit
 ```
 

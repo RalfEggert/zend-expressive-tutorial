@@ -7,26 +7,22 @@ use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\HydratingResultSet;
 use Zend\Hydrator\ArraySerializable;
 
-/**
- * Class AlbumTableGatewayFactory
- *
- * @package Album\Db
- */
 class AlbumTableGatewayFactory
 {
     /**
      * @param ContainerInterface $container
-     *
      * @return AlbumTableGateway
      */
     public function __invoke(ContainerInterface $container)
     {
-        $adapter = $container->get(AdapterInterface::class);
-
         $resultSetPrototype = new HydratingResultSet(
-            new ArraySerializable(), new AlbumEntity()
+            new ArraySerializable(),
+            new AlbumEntity()
         );
 
-        return new AlbumTableGateway($adapter, $resultSetPrototype);
+        return new AlbumTableGateway(
+            $container->get(AdapterInterface::class),
+            $resultSetPrototype
+        );
     }
 }
