@@ -10,7 +10,7 @@ return [
                 Zend\Expressive\ZendView\ZendViewRendererFactory::class,
 
             Zend\View\HelperPluginManager::class =>
-                App\View\HelperPluginManagerFactory::class,
+                Zend\Expressive\ZendView\HelperPluginManagerFactory::class,
         ],
     ],
 
