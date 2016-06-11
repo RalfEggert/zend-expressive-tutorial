@@ -767,7 +767,7 @@ use Zend\Diactoros\Response\RedirectResponse;
 use Zend\Expressive\Router\RouterInterface;
 
 /**
- * Class AlbumDeleteHandleAction
+ * Class AlbumDeleteFormAction
  *
  * @package Album\Action
  */
