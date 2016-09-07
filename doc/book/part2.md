@@ -400,8 +400,7 @@ instance:
 
 ```php
 <?php
-
-namespace AlbumTest\Action;
+namespace AppTest\Action;
 
 use Album\Action\AlbumListAction;
 use Album\Action\AlbumListFactory;
