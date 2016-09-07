@@ -8,6 +8,10 @@ $configManager = new ConfigManager([
     \Zend\InputFilter\ConfigProvider::class,
     \Zend\Hydrator\ConfigProvider::class,
     \Zend\Db\ConfigProvider::class,
+    Zend\Filter\ConfigProvider::class,
+    Zend\I18n\ConfigProvider::class,
+    Zend\Router\ConfigProvider::class,
+    Zend\Validator\ConfigProvider::class,
     new PhpFileProvider('config/autoload/{{,*.}global,{,*.}local}.php'),
 ]);
 
