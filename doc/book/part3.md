@@ -30,11 +30,41 @@ INSERT INTO album (artist, title)
     VALUES  ('Gotye',  'Making  Mirrors');
 ```
 
+## Install `Zend\Db` component
+
 Next, we'll add the [zend-db](https://github.com/zendframework/zend-db)
 component to the application, using composer:
  
 ```
 $ composer require zendframework/zend-db
+```
+
+When you run this installation via Composer the `Zend\ComponentInstaller`
+steps in here now and asks you if you want to inject the 
+`Zend\Db\ConfigProvider` into your config file. You should select it with 
+the choice of `1` and also remember your decision with `y`. It should look 
+like this:
+
+![Install Zend\Db component](images/install-zend-db.png)
+
+Please note that your `/config/config.php` should be updated as well by 
+adding the `Zend\Db\ConfigProvider`:
+
+```php
+
+use Zend\Expressive\ConfigManager\ConfigManager;
+use Zend\Expressive\ConfigManager\PhpFileProvider;
+
+$configManager = new ConfigManager([
+    \Zend\Db\ConfigProvider::class,
+    Zend\Filter\ConfigProvider::class,
+    Zend\I18n\ConfigProvider::class,
+    Zend\Router\ConfigProvider::class,
+    Zend\Validator\ConfigProvider::class,
+    new PhpFileProvider('config/autoload/{{,*.}global,{,*.}local}.php'),
+]);
+
+return new ArrayObject($configManager->getMergedConfig());
 ```
 
 To configure database access, create the file
@@ -329,6 +359,45 @@ Any time you want to use a different data storage &mdash; e.g., a NoSQL
 database, a web service, etc. &mdash; you can create a new class implementing
 this interface. You would then only need to swap which storage implementation
 you use.
+
+## Install `Zend\Hydrator` component
+
+Before you continue, we'll add the 
+[zend-hydrator](https://github.com/zendframework/zend-hydrator)
+component to the application, using composer:
+ 
+```
+$ composer require zendframework/zend-hydrator
+```
+
+When you run this installation via Composer the `Zend\ComponentInstaller`
+steps in here again and asks you if you want to inject the 
+`Zend\Hydrator\ConfigProvider` into your config file. You should select it 
+with the choice of `1` and also remember your decision with `y`. It should 
+look like this:
+
+![Install Zend\Hydrator component](images/install-zend-hydrator.png)
+
+Please note that your `/config/config.php` should be updated as well by 
+adding the `Zend\Hydrator\ConfigProvider`:
+
+```php
+
+use Zend\Expressive\ConfigManager\ConfigManager;
+use Zend\Expressive\ConfigManager\PhpFileProvider;
+
+$configManager = new ConfigManager([
+    \Zend\Hydrator\ConfigProvider::class,
+    \Zend\Db\ConfigProvider::class,
+    Zend\Filter\ConfigProvider::class,
+    Zend\I18n\ConfigProvider::class,
+    Zend\Router\ConfigProvider::class,
+    Zend\Validator\ConfigProvider::class,
+    new PhpFileProvider('config/autoload/{{,*.}global,{,*.}local}.php'),
+]);
+
+return new ArrayObject($configManager->getMergedConfig());
+```
 
 ## Create a table gateway
 
