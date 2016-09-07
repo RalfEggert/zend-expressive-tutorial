@@ -70,6 +70,66 @@ application responds correctly!
 
 ![Screenshot after installation](images/screen-after-installation.png)
 
+## Add the component installer and the config manager
+
+In the next step you should add the `Zend\ComponentInstaller` and the 
+`Zend\Expressive\ConfigManager` via Composer to ease the installation of
+other Zend Framework components.
+
+The `Zend\ComponentInstaller` is a plugin for the Composer which helps you 
+to activate the configuration provided by `ConfigProvider` classes in Zend
+Framework components. When you require new components it activates them
+for you. Read more at the official 
+[`Zend\ComponentInstaller` documentation](https://docs.zendframework.com/zend-component-installer/).
+
+To install the `Zend\ComponentInstaller` just require it with the Composer:
+
+```bash
+$ composer require zendframework/zend-component-installer
+```
+
+The `Zend\Expressive\ConfigManager` is a lightweight library for 
+collecting and merging configuration from different sources. It is designed 
+for `Zend\Expressive` applications, but it can work with any PHP project.
+
+To install the `Zend\Expressive\ConfigManager` just require it with the 
+Composer:
+
+```bash
+$ composer require mtymek/expressive-config-manager
+```
+
+Finally, you need to change the configuration of your `Zend\Expressive` 
+application to use the `Zend\Expressive\ConfigManager`. For this you need 
+to overwrite the current content of the `/config/config.php` file with the
+following code.
+
+
+```php
+<?php
+
+use Zend\Expressive\ConfigManager\ConfigManager;
+use Zend\Expressive\ConfigManager\PhpFileProvider;
+
+$configManager = new ConfigManager([
+    Zend\Filter\ConfigProvider::class,
+    Zend\I18n\ConfigProvider::class,
+    Zend\Router\ConfigProvider::class,
+    Zend\Validator\ConfigProvider::class,
+    new PhpFileProvider('config/autoload/{{,*.}global,{,*.}local}.php'),
+]);
+
+return new ArrayObject($configManager->getMergedConfig());
+```
+
+Please note: normally you only need to add the `PhpFileProvider`. But since
+the components `Zend\Filter`, `Zend\I18n`, `Zend\Router` and 
+`Zend\Validator` have already been installed before the installation of
+the `Zend\Expressive\ConfigManager` you need to add them manually here.
+
+If you browse to [http://localhost:8080/](http://localhost:8080/) again
+your application should still work.
+
 ## Compare with example repository branch `part1`
 
 You can easily compare your code with the example repository when looking 
