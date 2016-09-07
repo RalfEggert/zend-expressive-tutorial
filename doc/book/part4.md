@@ -14,12 +14,43 @@ need to run the Composer to require the
 components of the Zend Framework.
  
 ```
-$ composer require zendframework/zend-inputfilter
-$ composer require zendframework/zend-form
+$ composer require zendframework/zend-inputfilter zendframework/zend-form
 ```
 
 Please note: since `Zend\Form` currently requires `Zend\InputFilter` we
-do not really need to add both. `Zend\Form` would be enough. 
+do not really need to add both. `Zend\Form` would be enough.
+ 
+When you run this installation via Composer the `Zend\ComponentInstaller`
+steps in here now and asks you if you want to inject the 
+`Zend\InputFilter\ConfigProvider` into your config file. You should select 
+it with the choice of `1` and also remember your decision with `y`. It 
+should look like this:
+
+![Install Zend\InputFilter and Zend\Form components](images/install-zend-inputfilter-form.png)
+
+Please note that your `/config/config.php` should be updated as well by 
+adding the `Zend\InputFilter\ConfigProvider` and 
+`Zend\Form\ConfigProvider`:
+
+```php
+
+use Zend\Expressive\ConfigManager\ConfigManager;
+use Zend\Expressive\ConfigManager\PhpFileProvider;
+
+$configManager = new ConfigManager([
+    \Zend\Form\ConfigProvider::class,
+    \Zend\InputFilter\ConfigProvider::class,
+    \Zend\Hydrator\ConfigProvider::class,
+    \Zend\Db\ConfigProvider::class,
+    Zend\Filter\ConfigProvider::class,
+    Zend\I18n\ConfigProvider::class,
+    Zend\Router\ConfigProvider::class,
+    Zend\Validator\ConfigProvider::class,
+    new PhpFileProvider('config/autoload/{{,*.}global,{,*.}local}.php'),
+]);
+
+return new ArrayObject($configManager->getMergedConfig());
+```
 
 ## Create the album input filter
 
