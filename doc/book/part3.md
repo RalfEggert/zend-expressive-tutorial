@@ -73,13 +73,6 @@ To configure database access, create the file
 ```php
 <?php
 return [
-    'dependencies' => [
-        'factories' => [
-            Zend\Db\Adapter\AdapterInterface::class =>
-                Zend\Db\Adapter\AdapterServiceFactory::class,
-        ],
-    ],
-
     'db' => [
         'driver'  => 'pdo',
         'dsn'     => 'mysql:dbname=album-tutorial;host=localhost;charset=utf8',
@@ -89,15 +82,9 @@ return [
 ];
 ```
 
-- The `dependencies` configuration section configures the application service
-  container to add a factory for returning a database adapter.  The factory
-  `Zend\Db\Adapter\AdapterServiceFactory` instantiates a new database adapter by
-  using the configuration provided under the `db` key. The instantiated database
-  adapter will be accessible via the name `Zend\Db\Adapter\AdapterInterface`.
-  
-- The `db` configuration section defines the database connection. We will
-  use the PDO driver with a MySQL database, and the database table and user
-  we created above. 
+The `db` configuration section defines the database connection. We will
+use the PDO driver with a MySQL database, and the database table and user
+we created above. 
 
 > ### Store credentials in `*.local.php` files
 >
