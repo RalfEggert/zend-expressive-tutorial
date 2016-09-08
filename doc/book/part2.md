@@ -199,7 +199,7 @@ We can now use this factory to create an `AlbumListAction` instance.
 ## Create a template for listing albums
 
 We now need a template file for the album list. First, create
-the path `templates/album/`:
+the path `templates/album/` in the root of the project:
 
 ```bash
 $ mkdir -p templates/album/
