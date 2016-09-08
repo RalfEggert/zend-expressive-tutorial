@@ -17,7 +17,11 @@ Please delete the following file paths and all of the files in there:
 
 Please remove the following unused configuration:
 
-* The `autoload-dev` section from the `composer.json` file.
+* The `App\\` line in the `autoload` section from the `composer.json` 
+  file.
+
+* The `AppTest\\` line in the `autoload-dev` section from the 
+  `composer.json` file.
 
 * The `App\Action\PingAction` and `App\Action\HomePageAction` from the 
   `dependencies` section of the `/config/autoload/routes.global.php` file.
