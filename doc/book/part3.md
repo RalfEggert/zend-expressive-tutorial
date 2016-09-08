@@ -751,7 +751,7 @@ class AlbumRepositoryFactory
 ## Update the album configuration
 
 Now that we have storage and our repository sorted, we need to add dependency
-configuration to the applicaition.  Edit the file
+configuration to the application.  Edit the file
 `config/autoload/album.global.php` and add the following configuration to the
 `dependencies` section.
 
