@@ -2,6 +2,234 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 1.0.3 - 2016-09-01
+
+### Added
+
+- [#93](https://github.com/zendframework/zend-expressive-skeleton/pull/93) adds
+  support for Pimple "extensions" (`$pimple->extend()`) via the `dependencies`
+  sub-key `extensions`, as follows:
+
+  ```php
+  return [
+      'dependencies' => [
+          SomeClass::class => ExtendingFactory::class,
+      ],
+  ];
+  ```
+
+- [#93](https://github.com/zendframework/zend-expressive-skeleton/pull/93) adds
+  support to the Pimple container script to allow wrapping `delegators`
+  (delegator factories from zend-servicemanager) as anonymous Pimple extensions.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- [#102](https://github.com/zendframework/zend-expressive-skeleton/pull/102)
+  removes the development dependendy on ocramius/proxy-manager, as it is not
+  required.
+
+### Fixed
+
+- [#91](https://github.com/zendframework/zend-expressive-skeleton/pull/91) fixes
+  the Pimple factory caching to work correctly with invokable classes used as
+  factories.
+- [#95](https://github.com/zendframework/zend-expressive-skeleton/pull/95) fixes
+  the prompt for a minimal install to ensure that only `n` and `y` (or uppercase
+  versions of each) are valid answers, looping until a valid answer is provided.
+- [#101](https://github.com/zendframework/zend-expressive-skeleton/pull/101)
+  removes filp/whoops from the `composer.json` prior to prompting the user for
+  packages to install, ensuring it does not remain if a user selects a minimal
+  install or to not use whoops for development.
+- [#109](https://github.com/zendframework/zend-expressive-skeleton/pull/109)
+  adds comprehensive, granular tests covering all functionality of the
+  installer, raising coverage from 40% to 100%.
+
+## 1.0.2 - 2016-04-21
+
+### Added
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- [#85](https://github.com/zendframework/zend-expressive-skeleton/pull/85)
+  updates the Aura.Di dependency to stable 3.X versions.
+- [#88](https://github.com/zendframework/zend-expressive-skeleton/pull/88)
+  modifies the installer to remove `composer.lock` from the `.gitignore` file
+  during initial installation.
+- [#89](https://github.com/zendframework/zend-expressive-skeleton/pull/89)
+  updates the zend-stdlib dependency to allow usage of its v3 series.
+
+## 1.0.1 - 2016-03-17
+
+### Added
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- [#53](https://github.com/zendframework/zend-expressive-skeleton/pull/53)
+  updates the default Pimple container script such that it now caches factory
+  instances for re-use.
+- [#72](https://github.com/zendframework/zend-expressive-skeleton/pull/72)
+  updates the `composer.json` to remove the possibility of installing an
+  Expressive RC version, updates zend-servicemanager to allow using 3.0
+  versions, and updates whoops to allow either 1.1 or 2.0 versions.
+- [#80](https://github.com/zendframework/zend-expressive-skeleton/pull/80)
+  updates the default ProxyManager constraints to also allow v2 versions.
+- [#81](https://github.com/zendframework/zend-expressive-skeleton/pull/81)
+  fixes an issue in the installer whereby specified constraints were not being
+  passed to Composer prior to dependency resolution/installation, resulting in
+  stale dependencies.
+- [#78](https://github.com/zendframework/zend-expressive-skeleton/pull/78)
+  updates the shipped default error templates to remove error/exception display.
+  Users who really need this functionality can write their own templates; the
+  project aims to deliver a "safe by default" setting.
+
+## 1.0.0 - 2016-01-28
+
+First stable release.
+
+### Added
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- [#69](https://github.com/zendframework/zend-expressive-skeleton/pull/69)
+  updates the links in templates to point to the new documentation site on
+  https://zendframework.github.io/zend-expressive/ instead of rtfd.org.
+
+## 1.0.0rc8 - 2016-01-21
+
+Eighth release candidate.
+
+### Added
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- [#66](https://github.com/zendframework/zend-expressive-skeleton/pull/66)
+  adds the `'error' => true,` declaration to the `'error'` pipeline middleware
+  specification.
+- [#67](https://github.com/zendframework/zend-expressive-skeleton/pull/67)
+  updates the `filp/whoops` dependency for installer development to `^1.1 || ^2.0`;
+  the two are compatible for our use cases, but we should prefer the latest
+  that can be installed. As 2.0 requires PHP 5.5.9, but our minimum PHP version
+  is 5.5.0, we must specify both.
+
+## 1.0.0rc7 - 2016-01-19
+
+Seventh release candidate.
+
+### Added
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- [#64](https://github.com/zendframework/zend-expressive-skeleton/pull/64)
+  fixes the installer script to correctly rewrite the `require-dev` section
+  and ensure only the development dependencies selected, as well as base 
+  requirements such as PHPUnit and PHP_CodeSniffer, are installed. As such,
+  the `--no-dev` flag is no longer required, and development dependencies
+  such as whoops are properly installed.
+
+## 1.0.0rc6 - 2016-01-19
+
+Sixth release candidate.
+
+### Added
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- [#56](https://github.com/zendframework/zend-expressive-skeleton/pull/56)
+  updates the `composer serve` command to include the `public/index.php` script
+  as an argument. This ensures that asset paths that the application could
+  intercept and serve will be passed to the application (previously, the
+  built-in server would treat these as 404s, and never pass them to the
+  application).
+- [#57](https://github.com/zendframework/zend-expressive-skeleton/pull/57)
+  updates the Apache configuration rules defined in `public/.htaccess` to omit
+  several that could prevent the application from intercepting requests for
+  assets.
+- [#52](https://github.com/zendframework/zend-expressive-skeleton/pull/52)
+  fixes the switch statement in the `HomePageAction` class to ensure the
+  template name and documentation link are accurately found.
+- [#59](https://github.com/zendframework/zend-expressive-skeleton/pull/59)
+  updates the `config/container.php` implementation for zend-servicemanager such
+  that it can work with either v2 or v3 of that library.
+- [#60](https://github.com/zendframework/zend-expressive-skeleton/pull/60)
+  updates the zend-expressive-helpers dependency to `^2.0`, and updates the
+  `config/autoload/middleware-pipeline.global.php` to follow the changes in
+  middleware configuration introduced in [zend-expressive #270](https://github.com/zendframework/zend-expressive/pull/270).
+  The change introduces convention-based keys for "always" (execute before
+  routing), "routing" (routing, listeners that act on the route result, and
+  dispatching), and "error", with reasonable priorities to ensure execution
+  order.
+- [#60](https://github.com/zendframework/zend-expressive-skeleton/pull/60)
+  fixes the documentation for `composer create-project` to include the
+  `--no-dev` flag; this is done as composer currently installs the development
+  dependencies listed before the installer script rewrites the `composer.json`
+  file. Running `composer update` or `composer install` within the project
+  directory after the initial installation will install the development
+  dependencies.
+
 ## 1.0.0rc5 - 2015-12-22
 
 Fifth release candidate.
