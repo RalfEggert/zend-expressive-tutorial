@@ -709,7 +709,7 @@ class AlbumDeleteFormAction
 
 The `AlbumDeleteFormFactory` is also quite similar to the 
 `AlbumUpdateFormFactory` above. The only difference is the injection of 
-the delete from during instantiation of `AlbumDeleteFormAction`. 
+the delete form during instantiation of `AlbumDeleteFormAction`. 
 
 ```php
 <?php
@@ -750,7 +750,7 @@ class AlbumDeleteFormFactory
 For the deletion handling you need to create the `AlbumDeleteFormAction.php` 
 which works different than the form handling middleware actions for album
 creation and updating. In the `__invoke()` method it checks if the 
-deletion confirm button named `delete_album_yes` was send to delete the 
+deletion confirm button named `delete_album_yes` was sent to delete the 
 album. No matter which submit button was sent, a redirect to the album 
 list is created at the end.
 
