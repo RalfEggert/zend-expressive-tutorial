@@ -390,8 +390,8 @@ return [
 
 Please create the `AlbumCreateFormAction.php` file in the existing 
 `/src/Album/Action/` path. The `AlbumCreateFormAction` is used to show the 
-album form for creating new albums. It does not handle the form when send. 
-It only passes the form to the template for rendering. And it sets a 
+album form for creating new albums. It won't handle the form processing, 
+it only passes the form to the template for rendering. And it sets a 
 message depending on the current form validation state. 
 
 ```php
