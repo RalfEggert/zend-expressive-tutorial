@@ -145,3 +145,10 @@ $ git checkout -b part1 origin/part1
 Or view it online:
 
 - [https://github.com/RalfEggert/zend-expressive-tutorial/tree/part1](https://github.com/RalfEggert/zend-expressive-tutorial/tree/part1)
+
+**Attention:** Just a last note regarding the `composer.json` file in your project. The
+versions in your `require` section could differ from the versions in the 
+`require` section of the repository. Versions get updated frequently and
+this tutorial and the corresponding code will not be updated for every 
+version of every component. The updates will be done if there are bigger 
+changes like new major versions for any component.
