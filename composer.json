@@ -1,6 +1,6 @@
 {
     "name": "ralfeggert/zend-expressive-tutorial",
-    "description": "Zend\Expressive tutorial based on the Zend\Expressive skeleton",
+    "description": "Zend\\Expressive tutorial based on the Zend\\Expressive skeleton",
     "type": "project",
     "homepage": "https://github.com/ralfeggert/zend-expressive-tutorial",
     "license": "BSD-3-CLAUSE",
